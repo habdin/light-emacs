@@ -29,6 +29,14 @@
 
 (straight-use-package 'use-package)
 
+;; Install Paradox for browsing packages
+(use-package paradox
+  :defer t
+  :straight t
+  :config
+  (setq paradox-github-token (concat user-emacs-directory "paradox-token"))
+  (paradox-enable))
+
 ;; Configure Package
 
 (use-package package

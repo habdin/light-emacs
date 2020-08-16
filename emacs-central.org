@@ -3,7 +3,8 @@
   The base emacs components will include the following:
   1- Emacs initialization
   2- Package management
-  3- User Interface settings
+  3- Personal information
+  4- User Interface settings
   
 ** Emacs Initialization
 
@@ -12,9 +13,10 @@
 
   (load (concat user-emacs-directory "base/bootstrap.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/pkgmngr.el") nil 'nomessage)
-  (load (concat user-emacs-directory "modules/tools/vc-conf")nil 'nomessage)
-#+END_SRC
+  (load (concat user-emacs-directory "base/personal-info.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/tools/vc-conf") nil 'nomessage)
 
+#+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle base/bootstrap.el :mkdirp yes
   ;;; bootstrap.el -*- lexical-binding: t; -*-
@@ -65,6 +67,14 @@
 
   (straight-use-package 'use-package)
 
+  ;; Install Paradox for browsing packages
+  (use-package paradox
+    :defer t
+    :straight t
+    :config
+    (setq paradox-github-token (concat user-emacs-directory "paradox-token"))
+    (paradox-enable))
+
   ;; Configure Package
 
   (use-package package
@@ -79,8 +89,16 @@
 		 '("org" . "http://orgmode.org/elpa/") t))
 #+END_SRC
 
-** User Interface settings
+** Personal Information
 
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/personal-info.el
+;;; personal-info.el -*- lexical-binding: t; -*-
+
+(setq user-full-name "Hassan Abdin"
+      user-mail-address "habdin@gmail.com")
+
+#+END_SRC
+** User Interface settings
 * Light Emacs Modules configuration
 ** Version control
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/vc-conf.el
