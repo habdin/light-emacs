@@ -1,0 +1,81 @@
+* About Emacs-Central
+  
+  I decided to put all my emacs configuration and elisp functions into this file which 
+  I renamed from master.org into emacs-bootstrap.org to reflect my way of thinking for 
+  my emacs configuration. With all the capabilities of Org-mode in hand, I decided to 
+  use the tangle tool to convert all the Org-mode source blocks into corresponding files 
+  and directories within my emacs configuration folder.
+
+* Emacs Core configuration
+  
+  The core emacs components will include the following:
+  1- Emacs initialization
+  2- Package management
+  3- Buffer settings
+  4- Miscellaneous core emacs settings
+
+** Emacs Initialization
+
+#+BEGIN_SRC emacs-lisp :tangle init.el
+  ;;; init.el -*- lexical-binding: t; -*-
+
+  (load (concat user-emacs-directory "base/bootstrap.el") nil 'nomessage)
+  (load (concat user-emacs-directory "base/pkgmngr.el") nil 'nomessage)
+
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp :tangle base/bootstrap.el :mkdirp yes
+  ;;; bootstrap.el -*- lexical-binding: t; -*-
+
+  ;; Disable garbagge collection at Emacs bootstrap
+  (setq gc-cons-threshold most-positive-fixnum)
+
+  ;; Defer listing of installed local emacs packages till Emacs starts.
+  (setq package-enable-at-startup nil)
+  (advice-add #'package--ensure-init-file :override #'ignore)
+
+  (tool-bar-mode 0)
+  (menu-bar-mode 0)
+  (scroll-bar-mode 0)
+#+END_SRC
+
+** Package Management
+
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/pkgmngr.el
+  ;;; pkgmngr.el -*- lexical-binding: t; -*-
+
+  ;; Initialize Straight
+
+  (setq straight-base-dir (concat user-emacs-directory ".local")
+	straight-repository-branch "develop"
+	straight-cache-autoloads nil
+	straight-check-for-modifications nil
+	straight-enable-package-integration nil
+	straight-vc-git-default-clone-depth 1
+	autoload-compute-prefixes nil
+	straight-use-package-by-default t)
+
+
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+	 (expand-file-name ".local/straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	(bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+	  (url-retrieve-synchronously
+	   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	   'silent 'inhibit-cookies)
+	(goto-char (point-max))
+	(eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+
+  ;; Install use-package
+
+  (straight-use-package 'use-package)
+#+END_SRC
+
+
+** Various Buffer settings
+
+* Emacs Modules configuration
