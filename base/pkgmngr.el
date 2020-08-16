@@ -28,3 +28,16 @@
 ;; Install use-package
 
 (straight-use-package 'use-package)
+
+;; Configure Package
+
+(use-package package
+  :defer t
+  :config
+  (setq package-enable-at-startup nil)
+  (add-to-list 'package-archives
+	       '("gnu" . "https://elpa.gnu.org/packages/") t)
+  (add-to-list 'package-archives
+	       '("melpa" . "http://melpa.org/packages/") t)
+  (add-to-list 'package-archives
+	       '("org" . "http://orgmode.org/elpa/") t))

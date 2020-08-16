@@ -1,19 +1,10 @@
-* About Emacs-Central
+* Light Emacs Base configuration
   
-  I decided to put all my emacs configuration and elisp functions into this file which 
-  I renamed from master.org into emacs-bootstrap.org to reflect my way of thinking for 
-  my emacs configuration. With all the capabilities of Org-mode in hand, I decided to 
-  use the tangle tool to convert all the Org-mode source blocks into corresponding files 
-  and directories within my emacs configuration folder.
-
-* Emacs Core configuration
-  
-  The core emacs components will include the following:
+  The base emacs components will include the following:
   1- Emacs initialization
   2- Package management
-  3- Buffer settings
-  4- Miscellaneous core emacs settings
-
+  3- User Interface settings
+  
 ** Emacs Initialization
 
 #+BEGIN_SRC emacs-lisp :tangle init.el
@@ -21,7 +12,7 @@
 
   (load (concat user-emacs-directory "base/bootstrap.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/pkgmngr.el") nil 'nomessage)
-
+  (load (concat user-emacs-directory "modules/tools/vc-conf")nil 'nomessage)
 #+END_SRC
 
 
@@ -73,9 +64,44 @@
   ;; Install use-package
 
   (straight-use-package 'use-package)
+
+  ;; Configure Package
+
+  (use-package package
+    :defer t
+    :config
+    (setq package-enable-at-startup nil)
+    (add-to-list 'package-archives
+		 '("gnu" . "https://elpa.gnu.org/packages/") t)
+    (add-to-list 'package-archives
+		 '("melpa" . "http://melpa.org/packages/") t)
+    (add-to-list 'package-archives
+		 '("org" . "http://orgmode.org/elpa/") t))
 #+END_SRC
 
+** User Interface settings
 
-** Various Buffer settings
+* Light Emacs Modules configuration
+** Version control
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/vc-conf.el
+  ;; vc-conf.el -*- lexical-binding: t; -*-
 
-* Emacs Modules configuration
+  (use-package magit
+    :straight t)
+
+  (use-package magit-gh-pulls
+    :straight t
+    :defer t
+    :config
+    (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
+
+  (use-package magit-gitflow
+    :straight t)
+
+  (use-package magit-imerge
+    :straight t)
+
+  (use-package magithub
+    :straight t)
+
+#+END_SRC
