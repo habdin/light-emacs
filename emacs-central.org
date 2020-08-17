@@ -14,6 +14,7 @@
   (load (concat user-emacs-directory "base/bootstrap.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/pkgmngr.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/personal-info.el") nil 'nomessage)
+  (load (concat user-emacs-directory "base/modeline-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/tools/vc-conf") nil 'nomessage)
 
 #+END_SRC
@@ -98,7 +99,21 @@
       user-mail-address "habdin@gmail.com")
 
 #+END_SRC
+** Lignt Emacs lisp functions
 ** User Interface settings
+*** Modeline settings
+
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/modeline-conf.el
+  ;;; modeline-conf.el -*- lexical-binding: t; -*-
+
+  (use-package doom-modeline
+	       :straight t
+	       :init (doom-modeline-mode 1)
+	       (setq doom-modeline-height 16))
+
+#+END_SRC
+*** Themes
+*** Buffer settings
 * Light Emacs Modules configuration
 ** Version control
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/vc-conf.el
