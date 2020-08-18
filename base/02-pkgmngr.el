@@ -1,4 +1,4 @@
-;;; pkgmngr.el -*- lexical-binding: t; -*-
+;;; 02-pkgmngr.el -*- lexical-binding: t; -*-
 
 ;; Initialize Straight
 
@@ -36,6 +36,15 @@
   :config
   (setq paradox-github-token (concat user-emacs-directory "paradox-token"))
   (paradox-enable))
+
+;; Install diminish and delight for use with use-package when needed.
+(use-package diminish
+  :straight t
+  :defer t)
+
+(use-package delight
+  :straight t
+  :defer t)
 
 ;; Configure Package
 
