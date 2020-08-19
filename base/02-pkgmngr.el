@@ -52,6 +52,8 @@
   :defer t
   :config
   (setq package-enable-at-startup nil)
+  (setq package-user-dir (concat user-emacs-directory ".local/elpa")
+	package-gnupghome-dir (expand-file-name "gpg" package-user-dir))
   (add-to-list 'package-archives
 	       '("gnu" . "https://elpa.gnu.org/packages/") t)
   (add-to-list 'package-archives

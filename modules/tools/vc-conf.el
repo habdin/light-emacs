@@ -17,3 +17,9 @@
 
 (use-package magithub
   :straight t)
+
+(use-package diff-hl
+  :straight t
+  :defer t
+  :config
+  (global-diff-hl-mode))

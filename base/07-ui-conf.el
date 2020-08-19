@@ -23,13 +23,4 @@
 
 ;; Always indicate empty lines within files and buffers
 (setq default-indicate-empty-lines t)
-
-
-;;; Base Functionality tweaks
-
-;; Define default Emacs environment settings
-(set-language-environment "utf-8")
-(set-default-coding-systems 'utf-8)
-
-;; Change Default yes-or-no-p to a shorter prompt
-(fset 'yes-or-no-p 'y-or-n-p)
+(set-fringe-mode 4)
