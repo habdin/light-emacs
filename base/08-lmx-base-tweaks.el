@@ -4,6 +4,9 @@
 (set-language-environment "utf-8")
 (set-default-coding-systems 'utf-8)
 
+(setq auto-save-list-file-prefix (concat user-emacs-directory ".local/auto-save/.saves-"))
+(setq recentf-save-file (concat user-emacs-directory ".local/recentf"))
+
 ;; Change Default yes-or-no-p to a shorter prompt
 (fset 'yes-or-no-p 'y-or-n-p)
 

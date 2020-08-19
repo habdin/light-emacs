@@ -12,3 +12,5 @@
 (load (concat user-emacs-directory "base/10-prjmngr-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/tools/vc-conf") nil 'nomessage)
 (load (concat user-emacs-directory "modules/net/irc-conf") nil 'nomessage)
+(load (concat user-emacs-directory "modules/file-manager/treemacs.el") nil 'nomessage)
+(load (concat user-emacs-directory "modules/completion/complmngr-conf.el") nil 'nomessage)
