@@ -22,10 +22,10 @@
   (load (concat user-emacs-directory "base/09-bufmngr-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/10-prjmngr-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/tools/vc-conf") nil 'nomessage)
-  (load (concat user-emacs-directory "modules/net/irc-conf") nil 'nomessage)
   (load (concat user-emacs-directory "modules/file-manager/treemacs.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/completion/complmngr-conf.el") nil 'nomessage)
-
+  (load (concat user-emacs-directory "modules/prog/snippets-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/net/irc-conf") nil 'nomessage)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle base/01-bootstrap.el
@@ -226,8 +226,14 @@
   (use-package all-the-icons-dired
     :straight t
     :after all-the-icons
+    :defer t
     :config
     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
+  (use-package all-the-icons-ivy
+    :straight t
+    :after all-the-icons ivy
+    :defer t)
 
 #+END_SRC
 
@@ -270,9 +276,9 @@
   ;; Define default Emacs environment settings
   (set-language-environment "utf-8")
   (set-default-coding-systems 'utf-8)
-  
+
   (setq auto-save-list-file-prefix (concat user-emacs-directory ".local/auto-save/.saves-"))
-  (setq recentf-save-file (concat user-emacs-directory ".local/recentf"))
+
 
   ;; Change Default yes-or-no-p to a shorter prompt
   (fset 'yes-or-no-p 'y-or-n-p)
@@ -285,6 +291,18 @@
 
   ;; Make the Editor aware of disk changes for any file opened within Emacs
   (global-auto-revert-mode 1)
+
+  (use-package recentf
+  :config
+  (progn
+    ;; save every 60 minutes
+    (run-at-time nil (* 60 60) 'recentf-save-list)
+    (setq recentf-save-file (concat user-emacs-directory ".local/recentf")
+	  recentf-max-saved-items 1000
+	  recentf-auto-cleanup 'never
+	  recentf-exclude '("/ssh:"))
+    (recentf-mode t)))
+
 
   (use-package whitespace
     :diminish whitespace-mode
@@ -550,6 +568,28 @@
 
 #+END_SRC
 
+** Snippets system
+
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/prog/snippets-conf.el
+  ;;; snippets-conf.el -*- lexical-binding: t; -*-
+
+  (use-package yasnippet
+    :straight t
+    :defer t
+    :config
+    (yas-reload-all)
+    (add-hook 'prog-mode-hook #'yas-minor-mode)
+    (add-hook 'text-mode-hook #'yas-minor-mode)
+    (add-hook 'org-mode-hook #'yas-minor-mode))
+
+
+  (use-package yasnippet-snippets
+    :straight t
+    :after yasnippet)
+
+
+
+#+END_SRC
 ** IRC settings
 
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/net/irc-conf.el

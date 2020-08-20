@@ -5,7 +5,7 @@
 (set-default-coding-systems 'utf-8)
 
 (setq auto-save-list-file-prefix (concat user-emacs-directory ".local/auto-save/.saves-"))
-(setq recentf-save-file (concat user-emacs-directory ".local/recentf"))
+
 
 ;; Change Default yes-or-no-p to a shorter prompt
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -18,6 +18,18 @@
 
 ;; Make the Editor aware of disk changes for any file opened within Emacs
 (global-auto-revert-mode 1)
+
+(use-package recentf
+:config
+(progn
+  ;; save every 60 minutes
+  (run-at-time nil (* 60 60) 'recentf-save-list)
+  (setq recentf-save-file (concat user-emacs-directory ".local/recentf")
+	recentf-max-saved-items 1000
+	recentf-auto-cleanup 'never
+	recentf-exclude '("/ssh:"))
+  (recentf-mode t)))
+
 
 (use-package whitespace
   :diminish whitespace-mode
