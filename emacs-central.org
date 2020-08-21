@@ -25,6 +25,9 @@
   (load (concat user-emacs-directory "modules/file-manager/treemacs.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/completion/complmngr-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/prog/snippets-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/checkers/checkers-conf.el") nil 'nomeesage)
+  (load (concat user-emacs-directory "modules/programming/prog-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/lang/python-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/net/irc-conf") nil 'nomessage)
 #+END_SRC
 
@@ -293,15 +296,13 @@
   (global-auto-revert-mode 1)
 
   (use-package recentf
-  :config
-  (progn
-    ;; save every 60 minutes
+    :config
     (run-at-time nil (* 60 60) 'recentf-save-list)
     (setq recentf-save-file (concat user-emacs-directory ".local/recentf")
 	  recentf-max-saved-items 1000
 	  recentf-auto-cleanup 'never
 	  recentf-exclude '("/ssh:"))
-    (recentf-mode t)))
+    )
 
 
   (use-package whitespace
@@ -353,18 +354,18 @@
 			    (agenda .5)))
     (setq dashboard-set-navigator 1)
     (setq dashboard-navigator-buttons `(;; line1
-	  ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
-	   "Homepage"
-	   "Browse homepage"
-	   (lambda (&rest _) (browse-url "homepage")))
-	  ("★" "Star" "Show stars" (lambda (&rest _) (show-stars)) warning)
-	  ("?" "" "?/h" #'show-help nil "<" ">"))
-	   ;; line 2
-	  ((,(all-the-icons-faicon "linkedin" :height 1.1 :v-adjust 0.0)
-	    "Linkedin"
-	    ""
-	    (lambda (&rest _) (browse-url "homepage")))
-	   ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error)))))
+					((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
+					  "Homepage"
+					  "Browse homepage"
+					  (lambda (&rest _) (browse-url "homepage")))
+					 ("★" "Star" "Show stars" (lambda (&rest _) (show-stars)) warning)
+					 ("?" "" "?/h" #'show-help nil "<" ">"))
+					;; line 2
+					((,(all-the-icons-faicon "linkedin" :height 1.1 :v-adjust 0.0)
+					  "Linkedin"
+					  ""
+					  (lambda (&rest _) (browse-url "homepage")))
+					 ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error)))))
 #+END_SRC
 
 *** Buffer Manager settings
@@ -541,9 +542,13 @@
 
   (use-package ivy-hydra)
 
-  (use-package counsel)
+  (use-package counsel
+    :straight t
+    :defer t)
 
-  (use-package counsel-projectile)
+  (use-package counsel-projectile
+    :straight t
+    :after projectile counsel)
 
   (use-package counsel-pydoc)
 
@@ -576,12 +581,11 @@
   (use-package yasnippet
     :straight t
     :defer t
-    :config
-    (yas-reload-all)
+    :init
+    (add-hook 'yas-minor-mode-hook #'yas-reload-all)
     (add-hook 'prog-mode-hook #'yas-minor-mode)
     (add-hook 'text-mode-hook #'yas-minor-mode)
-    (add-hook 'org-mode-hook #'yas-minor-mode))
-
+    )
 
   (use-package yasnippet-snippets
     :straight t
@@ -590,6 +594,58 @@
 
 
 #+END_SRC
+
+** Checkers system
+
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/checkers/checkers-conf.el
+  ;;; checkers-conf -*- lexical-binding: t; -*-
+
+  (use-package flycheck
+    :straight t
+    :config
+    (add-hook 'prog-mode-hook #'flycheck-mode))
+
+  (use-package flyspell
+    :straight t
+    :config
+    (add-hook 'text-mode-hook #'flyspell-mode))
+#+END_SRC
+
+** Programming Support
+
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/programming/prog-conf.el
+  ;;; prog-conf.el -*- lexical-binding: t; -*-
+
+  (dolist (attach '(my-set-fira-code-ligatures display-line-numbers-mode))
+    (add-hook 'prog-mode-hook attach))
+#+END_SRC
+
+** Python support
+
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/python-conf.el
+  ;;; python-conf -*- lexical-binding: t; -*-
+
+  (use-package elpy
+    :straight t
+    :defer t
+    :init
+    (advice-add 'python-mode :before #'elpy-enable)
+    :config
+    (when (require 'flycheck nil t)
+      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+      ))
+
+   (use-package py-autopep8
+      :config
+      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+
+    (use-package ein
+      :config
+	(setq python-shell-interpreter "ipython"
+	      python-shell-interpreter-arg "-i --simple-prompt"))
+#+END_SRC
+
+
 ** IRC settings
 
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/net/irc-conf.el

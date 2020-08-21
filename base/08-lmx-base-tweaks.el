@@ -20,15 +20,13 @@
 (global-auto-revert-mode 1)
 
 (use-package recentf
-:config
-(progn
-  ;; save every 60 minutes
+  :config
   (run-at-time nil (* 60 60) 'recentf-save-list)
   (setq recentf-save-file (concat user-emacs-directory ".local/recentf")
 	recentf-max-saved-items 1000
 	recentf-auto-cleanup 'never
 	recentf-exclude '("/ssh:"))
-  (recentf-mode t)))
+  )
 
 
 (use-package whitespace
@@ -80,15 +78,15 @@
 			  (agenda .5)))
   (setq dashboard-set-navigator 1)
   (setq dashboard-navigator-buttons `(;; line1
-	((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
-	 "Homepage"
-	 "Browse homepage"
-	 (lambda (&rest _) (browse-url "homepage")))
-	("★" "Star" "Show stars" (lambda (&rest _) (show-stars)) warning)
-	("?" "" "?/h" #'show-help nil "<" ">"))
-	 ;; line 2
-	((,(all-the-icons-faicon "linkedin" :height 1.1 :v-adjust 0.0)
-	  "Linkedin"
-	  ""
-	  (lambda (&rest _) (browse-url "homepage")))
-	 ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error)))))
+				      ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
+					"Homepage"
+					"Browse homepage"
+					(lambda (&rest _) (browse-url "homepage")))
+				       ("★" "Star" "Show stars" (lambda (&rest _) (show-stars)) warning)
+				       ("?" "" "?/h" #'show-help nil "<" ">"))
+				      ;; line 2
+				      ((,(all-the-icons-faicon "linkedin" :height 1.1 :v-adjust 0.0)
+					"Linkedin"
+					""
+					(lambda (&rest _) (browse-url "homepage")))
+				       ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error)))))

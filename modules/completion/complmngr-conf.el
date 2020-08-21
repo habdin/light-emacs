@@ -34,9 +34,13 @@
 
 (use-package ivy-hydra)
 
-(use-package counsel)
+(use-package counsel
+  :straight t
+  :defer t)
 
-(use-package counsel-projectile)
+(use-package counsel-projectile
+  :straight t
+  :after projectile counsel)
 
 (use-package counsel-pydoc)
 
