@@ -3,7 +3,7 @@
 (use-package yasnippet
   :straight t
   :defer t
-  :init
+  :config
   (add-hook 'yas-minor-mode-hook #'yas-reload-all)
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   (add-hook 'text-mode-hook #'yas-minor-mode)

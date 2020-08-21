@@ -15,6 +15,6 @@
 (load (concat user-emacs-directory "modules/completion/complmngr-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/prog/snippets-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/checkers/checkers-conf.el") nil 'nomeesage)
-(load (concat user-emacs-directory "modules/programming/prog-conf.el") nil 'nomessage)
+(load (concat user-emacs-directory "modules/prog/prog-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/lang/python-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/net/irc-conf") nil 'nomessage)

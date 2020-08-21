@@ -26,7 +26,7 @@
   (load (concat user-emacs-directory "modules/completion/complmngr-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/prog/snippets-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/checkers/checkers-conf.el") nil 'nomeesage)
-  (load (concat user-emacs-directory "modules/programming/prog-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/prog/prog-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/lang/python-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/net/irc-conf") nil 'nomessage)
 #+END_SRC
@@ -581,7 +581,7 @@
   (use-package yasnippet
     :straight t
     :defer t
-    :init
+    :config
     (add-hook 'yas-minor-mode-hook #'yas-reload-all)
     (add-hook 'prog-mode-hook #'yas-minor-mode)
     (add-hook 'text-mode-hook #'yas-minor-mode)
@@ -602,18 +602,18 @@
 
   (use-package flycheck
     :straight t
-    :config
-    (add-hook 'prog-mode-hook #'flycheck-mode))
+    )
+
 
   (use-package flyspell
     :straight t
-    :config
-    (add-hook 'text-mode-hook #'flyspell-mode))
+    )
+    
 #+END_SRC
 
 ** Programming Support
 
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/programming/prog-conf.el
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/prog/prog-conf.el
   ;;; prog-conf.el -*- lexical-binding: t; -*-
 
   (dolist (attach '(my-set-fira-code-ligatures display-line-numbers-mode))
@@ -645,6 +645,7 @@
 	      python-shell-interpreter-arg "-i --simple-prompt"))
 #+END_SRC
 
+** HTML/CSS support
 
 ** IRC settings
 
