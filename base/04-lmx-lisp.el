@@ -58,3 +58,15 @@ FRAME is the name of the frame."
   (setq prettify-symbols-alist
 	(append my-fira-code-ligatures prettify-symbols-alist))
   (prettify-symbols-mode))
+
+(defun my-check-extension (extension)
+  "Check the file extension for the current buffer filename"
+  (string= (file-name-extension buffer-file-name) extension))
+
+(defun my-skewer-enable ()
+  "Enables skewer-mode html or css for files with respective file extensions."
+  (cond ((my-check-extension "html")
+	 (skewer-html-mode 1))
+	((my-check-extension "css")
+	 (skewer-css-mode 1)))
+  )

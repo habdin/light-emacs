@@ -27,6 +27,7 @@
   (load (concat user-emacs-directory "modules/prog/snippets-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/checkers/checkers-conf.el") nil 'nomeesage)
   (load (concat user-emacs-directory "modules/prog/prog-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/lang/webdev-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/lang/python-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/net/irc-conf") nil 'nomessage)
 #+END_SRC
@@ -194,6 +195,18 @@
     (setq prettify-symbols-alist
 	  (append my-fira-code-ligatures prettify-symbols-alist))
     (prettify-symbols-mode))
+
+  (defun my-check-extension (extension)
+    "Check the file extension for the current buffer filename"
+    (string= (file-name-extension buffer-file-name) extension))
+
+  (defun my-skewer-enable ()
+    "Enables skewer-mode html or css for files with respective file extensions."
+    (cond ((my-check-extension "html")
+	   (skewer-html-mode 1))
+	  ((my-check-extension "css")
+	   (skewer-css-mode 1)))
+    )
 #+END_SRC
 
 ** LMX Buffer settings
@@ -274,98 +287,99 @@
 *** Enhanced base functionality
 
 #+BEGIN_SRC emacs-lisp :mkdirp :tangle base/08-lmx-base-tweaks.el
-  ;;; 08-lmx-base-tweaks.el -*- lexical-binding: t; -*-
+    ;;; 08-lmx-base-tweaks.el -*- lexical-binding: t; -*-
 
-  ;; Define default Emacs environment settings
-  (set-language-environment "utf-8")
-  (set-default-coding-systems 'utf-8)
+    ;; Define default Emacs environment settings
+    (set-language-environment "utf-8")
+    (set-default-coding-systems 'utf-8)
 
-  (setq auto-save-list-file-prefix (concat user-emacs-directory ".local/auto-save/.saves-"))
-
-
-  ;; Change Default yes-or-no-p to a shorter prompt
-  (fset 'yes-or-no-p 'y-or-n-p)
-
-  ;; Always reveal the pairing symbol (brackets mainly +/- others)
-  (show-paren-mode t)
-
-  ;; Enable entering brackets, quotes, double-quotes and other symbols in pairs
-  (electric-pair-mode t)
-
-  ;; Make the Editor aware of disk changes for any file opened within Emacs
-  (global-auto-revert-mode 1)
-
-  (use-package recentf
-    :config
-    (run-at-time nil (* 60 60) 'recentf-save-list)
-    (setq recentf-save-file (concat user-emacs-directory ".local/recentf")
-	  recentf-max-saved-items 1000
-	  recentf-auto-cleanup 'never
-	  recentf-exclude '("/ssh:"))
-    )
+    (setq auto-save-list-file-prefix (concat user-emacs-directory ".local/auto-save/.saves-"))
 
 
-  (use-package whitespace
-    :diminish whitespace-mode
-    :config
-    (setq whitespace-line-column 10000))
+    ;; Change Default yes-or-no-p to a shorter prompt
+    (fset 'yes-or-no-p 'y-or-n-p)
 
-  ;; Use `volatile-highlights' to highlight changes from pasting, ...etc.
-  (use-package volatile-highlights
-    :straight t
-    :diminish volatile-highlights-mode
-    :defer t
-    :config
-    (volatile-highlights-mode t))
+    ;; Always reveal the pairing symbol (brackets mainly +/- others)
+    (show-paren-mode t)
 
-  ;; rainbow-mode - colourise colours in the buffer
-  (use-package rainbow-mode
-    :straight t
-    :defer t
-    )
+    ;; Enable entering brackets, quotes, double-quotes and other symbols in pairs
+    (electric-pair-mode t)
 
-  ;; rainbow-delimiters - show matching brackets etc
-  (use-package rainbow-delimiters
-    :straight t
-    :defer t
-    :config
-    (setq global-rainbow-delimiters-mode 1))
+    ;; Make the Editor aware of disk changes for any file opened within Emacs
+    (global-auto-revert-mode 1)
 
-  ;; show page breaks
-  (use-package page-break-lines
-    :straight t
-    :diminish page-break-lines-mode
-    :defer t
-    :config
-    (global-page-break-lines-mode 1)
-    (setq page-break-lines-modes '(emacs-lisp-mode lisp-mode scheme-mode compilation-mode outline-mode help-mode org-mode ess-mode latex-mode)))
+    (use-package recentf
+      :config
+      (run-at-time nil (* 60 60) 'recentf-save-list)
+      (setq recentf-save-file (concat user-emacs-directory ".local/recentf")
+	    recentf-max-saved-items 1000
+	    recentf-auto-cleanup 'never
+	    recentf-exclude '("/ssh:"))
+      )
 
-  ;;; Makes Emacs Dashboard the Initial startup screen
-  (use-package dashboard
-    :straight t
-    :config
-    (dashboard-setup-startup-hook)
-    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-    (setq dashboard-set-heading-icons 1)
-    (setq dashboard-set-file-icons 1)
-    (setq dashboard-items '((projects . 5)
-			    (recents . 5)
-			    (bookmarks . 5)
-			    (agenda .5)))
-    (setq dashboard-set-navigator 1)
-    (setq dashboard-navigator-buttons `(;; line1
-					((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
-					  "Homepage"
-					  "Browse homepage"
-					  (lambda (&rest _) (browse-url "homepage")))
-					 ("★" "Star" "Show stars" (lambda (&rest _) (show-stars)) warning)
-					 ("?" "" "?/h" #'show-help nil "<" ">"))
-					;; line 2
-					((,(all-the-icons-faicon "linkedin" :height 1.1 :v-adjust 0.0)
-					  "Linkedin"
-					  ""
-					  (lambda (&rest _) (browse-url "homepage")))
-					 ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error)))))
+
+    (use-package whitespace
+      :diminish whitespace-mode
+      :config
+      (setq whitespace-line-column 10000))
+
+    ;; Use `volatile-highlights' to highlight changes from pasting, ...etc.
+    (use-package volatile-highlights
+      :straight t
+      :diminish volatile-highlights-mode
+      :defer t
+      :config
+      (volatile-highlights-mode t))
+
+    ;; rainbow-mode - colourise colours in the buffer
+    (use-package rainbow-mode
+      :straight t
+      :defer t
+      )
+
+    ;; rainbow-delimiters - show matching brackets etc
+    (use-package rainbow-delimiters
+      :straight t
+      :defer t
+      :config
+      (setq global-rainbow-delimiters-mode 1))
+
+    ;; show page breaks
+    (use-package page-break-lines
+      :straight t
+      :diminish page-break-lines-mode
+      :defer t
+      :config
+      (global-page-break-lines-mode 1)
+      (setq page-break-lines-modes '(emacs-lisp-mode lisp-mode scheme-mode compilation-mode outline-mode help-mode org-mode ess-mode latex-mode)))
+
+    ;;; Makes Emacs Dashboard the Initial startup screen
+    (use-package dashboard
+      :straight t
+      :config
+      (dashboard-setup-startup-hook)
+      (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))
+	    dashboard-set-heading-icons 1
+	    dashboard-set-file-icons 1
+	    dashboard-items '((projects . 5)
+			      (recents . 5)
+			      (bookmarks . 5)
+			      (agenda .5))
+	    dashboard-set-navigator 1
+	    dashboard-navigator-buttons `(;; line1
+					  ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
+					    "Homepage"
+					    "Browse homepage"
+					    (lambda (&rest _) (browse-url "homepage")))
+					   ("★" "Star" "Show stars" (lambda (&rest _) (show-stars)) warning)
+					   ("?" "" "?/h" #'show-help nil "<" ">"))
+					  ;; line 2
+					  ((,(all-the-icons-faicon "linkedin" :height 1.1 :v-adjust 0.0)
+					    "Linkedin"
+					    ""
+					    (lambda (&rest _) (browse-url "homepage")))
+					   ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error)))
+	    dashboard-page-separator "\n \n"))
 #+END_SRC
 
 *** Buffer Manager settings
@@ -646,6 +660,65 @@
 #+END_SRC
 
 ** HTML/CSS support
+
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/webdev-conf.el
+  ;;; webdev-conf.el -*- lexical-binding: t; -*-
+
+    (use-package web-mode
+      :straight t
+      :init
+      (setq web-mode-enable-current-element-highlight t
+	    web-mode-enable-current-column-highlight t)
+      :mode
+      (("\\.phtml\\'" . web-mode)
+       ("\\.tpl\\.php\\'" . web-mode)
+       ("\\.[agj]sp\\'" . web-mode)
+       ("\\.as[cp]x\\'" . web-mode)
+       ("\\.erb\\'" . web-mode)
+       ("\\.mustache\\'" . web-mode)
+       ("\\.djhtml\\'" . web-mode)
+       ("\\.html?\\'" . web-mode)
+       ("\\.css\\'" . web-mode))
+      :config
+      (setq  web-mode-markup-indent-offset 2
+	     web-mode-css-indent-offset 2
+	     web-mode-code-indent-offset 2
+	     web-mode-style-padding 1
+	     web-mode-script-padding 1
+	     web-mode-block-padding 0
+	     web-mode-enable-auto-pairing t
+	     web-mode-enable-css-colorization t
+	     web-mode-enable-part-face t
+	     web-mode-comment-keywords t
+	     web-mode-enable-heredoc-fontification t)
+      (set-face-attribute 'web-mode-css-at-rule-face nil :foreground "Pink3")
+      )
+
+    ;; Configure Emmet-mode and attach it to Web-mode.
+
+    (use-package emmet-mode
+      :straight t
+      :config
+      (setq emmet-self-closing-tag-style "")
+      :hook (web-mode))
+
+
+    ;; Configure Skewer-mode
+
+    (use-package skewer-mode
+      :straight t
+      :init
+      (add-hook 'web-mode-hook 'my-skewer-enable)
+      :hook
+      (web-mode))
+
+    (use-package impatient-mode
+      :straight t
+      :hook
+      (web-mode))
+
+    (use-package lorem-ipsum)
+#+END_SRC
 
 ** IRC settings
 

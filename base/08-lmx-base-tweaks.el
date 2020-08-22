@@ -69,15 +69,15 @@
   :straight t
   :config
   (dashboard-setup-startup-hook)
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-  (setq dashboard-set-heading-icons 1)
-  (setq dashboard-set-file-icons 1)
-  (setq dashboard-items '((projects . 5)
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))
+	dashboard-set-heading-icons 1
+	dashboard-set-file-icons 1
+	dashboard-items '((projects . 5)
 			  (recents . 5)
 			  (bookmarks . 5)
-			  (agenda .5)))
-  (setq dashboard-set-navigator 1)
-  (setq dashboard-navigator-buttons `(;; line1
+			  (agenda .5))
+	dashboard-set-navigator 1
+	dashboard-navigator-buttons `(;; line1
 				      ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
 					"Homepage"
 					"Browse homepage"
@@ -89,4 +89,5 @@
 					"Linkedin"
 					""
 					(lambda (&rest _) (browse-url "homepage")))
-				       ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error)))))
+				       ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error)))
+	dashboard-page-separator "\n \n"))
