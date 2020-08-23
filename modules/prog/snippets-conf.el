@@ -3,10 +3,8 @@
 (use-package yasnippet
   :straight t
   :defer t
-  :config
-  (add-hook 'yas-minor-mode-hook #'yas-reload-all)
-  (add-hook 'prog-mode-hook #'yas-minor-mode)
-  (add-hook 'text-mode-hook #'yas-minor-mode)
+  :init
+  (yas-global-mode t)
   )
 
 (use-package yasnippet-snippets

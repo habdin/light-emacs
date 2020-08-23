@@ -29,7 +29,8 @@
   (load (concat user-emacs-directory "modules/prog/prog-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/lang/webdev-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/lang/python-conf.el") nil 'nomessage)
-  (load (concat user-emacs-directory "modules/net/irc-conf") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/tools/org-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/net/irc-conf.el") nil 'nomessage)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle base/01-bootstrap.el
@@ -602,10 +603,8 @@
   (use-package yasnippet
     :straight t
     :defer t
-    :config
-    (add-hook 'yas-minor-mode-hook #'yas-reload-all)
-    (add-hook 'prog-mode-hook #'yas-minor-mode)
-    (add-hook 'text-mode-hook #'yas-minor-mode)
+    :init
+    (yas-global-mode t)
     )
 
   (use-package yasnippet-snippets
@@ -726,6 +725,21 @@
 
     (use-package lorem-ipsum)
 #+END_SRC
+
+** Org mode extended support
+
+
+
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/org-conf.el
+  ;;; org-conf.el -*- lexical-binding: t; -*-
+
+  (use-package org-plus-contrib
+    :straight t
+    :defer t
+    :after org
+    )
+#+END_SRC
+
 
 ** IRC settings
 
