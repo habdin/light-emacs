@@ -91,3 +91,10 @@
 					(lambda (&rest _) (browse-url "homepage")))
 				       ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error)))
 	dashboard-page-separator "\n \n"))
+
+;; Garbagge collector Management
+
+(use-package gcmh
+  :straight t
+  :config
+  (gcmh-mode t))
