@@ -49,9 +49,16 @@
 ;; These will be configured in here as well.
 
 (use-package company
-  :ensure t
+  :straight t
   :config
   (add-hook 'after-init-hook 'global-company-mode)
+  :init
+  (setq company-idle-delay 0.1
+	company-minimum-prefix-length 2
+	company-tooltip-align-annotations t
+	company-global-modes '(not help-mode gud-mode message-mode)
+	company-backends '(company-capf company-files company-abbrev company-dabbrev)
+	)
   :bind
   ("M-C-<space>" . 'company-complete))
 
@@ -60,5 +67,13 @@
   )
 
 (use-package company-box
-  :ensure t
-  :hook (company-mode . company-box-mode))
+  :straight t
+  :hook (company-mode . company-box-mode)
+  :config
+  (setq company-box-icons-alist 'company-box-icons-all-the-icons))
+
+(use-package company-jedi
+  :straight t
+  :after company elpy
+  :config
+  (add-to-list 'company-backends 'company-jedi))
