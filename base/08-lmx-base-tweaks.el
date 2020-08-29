@@ -67,8 +67,12 @@
 ;;; Makes Emacs Dashboard the Initial startup screen
 (use-package dashboard
   :straight t
-  :config
+  :init
+  (setq dashboard-init-info
+	     (if (and (boundp 'straight--profile-cache) (hash-table-p straight--profile-cache))
+		 (format "%d packages loaded in %s" (hash-table-size straight--profile-cache) (emacs-init-time))))
   (dashboard-setup-startup-hook)
+  :config
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))
 	dashboard-set-heading-icons 1
 	dashboard-set-file-icons 1
@@ -77,6 +81,7 @@
 			  (bookmarks . 5)
 			  (agenda .5))
 	dashboard-set-navigator 1
+	dashboard-center-content 1
 	dashboard-navigator-buttons `(;; line1
 				      ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
 					"Homepage"
