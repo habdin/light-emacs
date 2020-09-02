@@ -11,6 +11,8 @@
 #+BEGIN_SRC emacs-lisp :tangle init.el
   ;;; init.el -*- lexical-binding: t; -*-
 
+  ;; LMX Base config files section
+
   (load (concat user-emacs-directory "base/01-bootstrap.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/02-pkgmngr.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/03-personal-info.el") nil 'nomessage)
@@ -21,6 +23,10 @@
   (load (concat user-emacs-directory "base/08-lmx-base-tweaks.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/09-bufmngr-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/10-prjmngr-conf.el") nil 'nomessage)
+
+
+  ;; LMX Mouules config files section
+
   (load (concat user-emacs-directory "modules/tools/vc-conf") nil 'nomessage)
   (load (concat user-emacs-directory "modules/file-manager/treemacs.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/completion/complmngr-conf.el") nil 'nomessage)
@@ -247,10 +253,6 @@
     :config
     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
-  (use-package all-the-icons-ivy
-    :straight t
-    :after all-the-icons ivy
-    :defer t)
 
 #+END_SRC
 
@@ -539,8 +541,9 @@
     :straight t
     :defer t
     :config
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-count-format "(%d/%d) ")
+    (setq ivy-use-virtual-buffers t
+	  ivy-count-format "[%d/%d] "
+	  ivy-height 20)
     :init
     (ivy-mode 1)
     :bind
@@ -568,6 +571,19 @@
     (ivy-posframe-mode t))
 
   (use-package ivy-hydra)
+
+  (use-package ivy-rich
+    :straight t
+    :defer t
+    :after ivy counsel
+    :init
+    (ivy-rich-mode))
+
+  (use-package all-the-icons-ivy-rich
+    :straight t
+    :defer t
+    :after ivy ivy-rich counsel
+    :init (all-the-icons-ivy-rich-mode))
 
   (use-package counsel
     :straight t

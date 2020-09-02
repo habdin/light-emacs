@@ -4,8 +4,9 @@
   :straight t
   :defer t
   :config
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
+  (setq ivy-use-virtual-buffers t
+	ivy-count-format "[%d/%d] "
+	ivy-height 20)
   :init
   (ivy-mode 1)
   :bind
@@ -33,6 +34,19 @@
   (ivy-posframe-mode t))
 
 (use-package ivy-hydra)
+
+(use-package ivy-rich
+  :straight t
+  :defer t
+  :after ivy counsel
+  :init
+  (ivy-rich-mode))
+
+(use-package all-the-icons-ivy-rich
+  :straight t
+  :defer t
+  :after ivy ivy-rich counsel
+  :init (all-the-icons-ivy-rich-mode))
 
 (use-package counsel
   :straight t

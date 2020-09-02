@@ -1,5 +1,7 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
+;; LMX Base config files section
+
 (load (concat user-emacs-directory "base/01-bootstrap.el") nil 'nomessage)
 (load (concat user-emacs-directory "base/02-pkgmngr.el") nil 'nomessage)
 (load (concat user-emacs-directory "base/03-personal-info.el") nil 'nomessage)
@@ -10,6 +12,10 @@
 (load (concat user-emacs-directory "base/08-lmx-base-tweaks.el") nil 'nomessage)
 (load (concat user-emacs-directory "base/09-bufmngr-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "base/10-prjmngr-conf.el") nil 'nomessage)
+
+
+;; LMX Mouules config files section
+
 (load (concat user-emacs-directory "modules/tools/vc-conf") nil 'nomessage)
 (load (concat user-emacs-directory "modules/file-manager/treemacs.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/completion/complmngr-conf.el") nil 'nomessage)

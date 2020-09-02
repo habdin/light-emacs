@@ -13,8 +13,3 @@
   :defer t
   :config
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
-
-(use-package all-the-icons-ivy
-  :straight t
-  :after all-the-icons ivy
-  :defer t)
