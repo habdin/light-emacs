@@ -46,7 +46,9 @@
   :straight t
   :defer t
   :after ivy ivy-rich counsel
-  :init (all-the-icons-ivy-rich-mode))
+  :init (all-the-icons-ivy-rich-mode)
+  :config
+  (setq all-the-icons-ivy-rich-icon-size 1.5))
 
 (use-package counsel
   :straight t
@@ -70,7 +72,7 @@
   (setq company-idle-delay 0.1
 	company-minimum-prefix-length 2
 	company-tooltip-align-annotations t
-	company-global-modes '(not help-mode gud-mode message-mode)
+	company-global-modes '(not help-mode gud-mode message-mode erc-mode)
 	company-backends '(company-capf company-files company-abbrev company-dabbrev)
 	)
   :bind

@@ -64,6 +64,7 @@
   (global-page-break-lines-mode 1)
   (setq page-break-lines-modes '(emacs-lisp-mode lisp-mode scheme-mode compilation-mode outline-mode help-mode org-mode ess-mode latex-mode)))
 
+
 ;;; Makes Emacs Dashboard the Initial startup screen
 (use-package dashboard
   :straight t
@@ -98,8 +99,19 @@
 	dashboard-page-separator "\n \n"))
 
 ;; Garbagge collector Management
-
 (use-package gcmh
   :straight t
   :config
   (gcmh-mode t))
+
+
+;; Enhanced keybinding user experience
+(use-package which-key
+  :straight t
+  :defer t
+  :init
+  (which-key-mode)
+  :config
+  (setq which-key-popup-type 'side-window
+	which-key-side-window-location 'bottom)
+  )
