@@ -11,12 +11,13 @@
 			  '(("^ *\\([-]\\) "
 			     (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
   (let* ((variable-tuple
-	  (cond
-	   ((x-list-fonts "Fira Code") '(:font "Fira Code"))
-	   ((x-list-fonts "Iosveka") '(:font "Iosveka"))
-	   ((x-list-fonts "Verdana") '(:font "Verdana"))
-	   ((x-family-fonts "Sans Serif") '(:family "Sans Serif"))
-	   (nil (warn "Can't find a Sans Serif Font. Please install Source Sans Pro."))))
+	  (when (display-graphic-p)
+	      (cond
+	       ((x-list-fonts "Fira Code") '(:font "Fira Code"))
+	       ((x-list-fonts "Iosveka") '(:font "Iosveka"))
+	       ((x-list-fonts "Verdana") '(:font "Verdana"))
+	       ((x-family-fonts "Sans Serif") '(:family "Sans Serif"))
+	       (nil (warn "Can't find a Sans Serif Font. Please install Source Sans Pro.")))))
 	 (base-font-color (face-foreground 'default nil 'default))
 	 (headline `(:inherit default :weight bold :foreground ,base-font-color)))
     (custom-theme-set-faces

@@ -15,6 +15,7 @@
      ("\\.djhtml\\'" . web-mode)
      ("\\.html?\\'" . web-mode)
      ("\\.css\\'" . web-mode))
+
     :config
     (setq  web-mode-markup-indent-offset 2
 	   web-mode-css-indent-offset 2

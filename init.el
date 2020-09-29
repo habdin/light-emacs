@@ -24,6 +24,8 @@
 (load (concat user-emacs-directory "modules/prog/prog-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/lang/webdev-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/lang/python-conf.el") nil 'nomessage)
+(load (concat user-emacs-directory "modules/lang/php-conf.el") nil 'nomessage)
+(load (concat user-emacs-directory "modules/lang/js-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/tools/org-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/tools/pdf-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/net/irc-conf.el") nil 'nomessage)

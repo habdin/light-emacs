@@ -72,9 +72,8 @@
   (setq company-idle-delay 0.1
 	company-minimum-prefix-length 2
 	company-tooltip-align-annotations t
-	company-global-modes '(not help-mode gud-mode message-mode erc-mode)
-	company-backends '(company-capf company-files company-abbrev company-dabbrev)
-	)
+	company-global-modes '(not help-mode gud-mode message-mode erc-mode))
+
   :bind
   ("M-C-<space>" . 'company-complete))
 

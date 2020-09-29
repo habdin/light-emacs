@@ -34,6 +34,8 @@
   (load (concat user-emacs-directory "modules/prog/prog-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/lang/webdev-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/lang/python-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/lang/php-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/lang/js-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/tools/org-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/tools/pdf-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/net/irc-conf.el") nil 'nomessage)
@@ -621,9 +623,8 @@
     (setq company-idle-delay 0.1
 	  company-minimum-prefix-length 2
 	  company-tooltip-align-annotations t
-	  company-global-modes '(not help-mode gud-mode message-mode erc-mode)
-	  company-backends '(company-capf company-files company-abbrev company-dabbrev)
-	  )
+	  company-global-modes '(not help-mode gud-mode message-mode erc-mode))
+
     :bind
     ("M-C-<space>" . 'company-complete))
 
@@ -683,7 +684,7 @@
     
 #+END_SRC
 
-** Programming Support
+** General Programming Support
 
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/prog/prog-conf.el
   ;;; prog-conf.el -*- lexical-binding: t; -*-
@@ -692,92 +693,164 @@
     (add-hook 'prog-mode-hook attach))
 #+END_SRC
 
-** Python support
+** Programming language Support
 
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/python-conf.el
-  ;;; python-conf -*- lexical-binding: t; -*-
+*** Python support
 
-  (use-package elpy
-    :straight t
-    :defer t
-    :init
-    (advice-add 'python-mode :before #'elpy-enable)
-    :config
-    (when (require 'flycheck nil t)
-      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-      ))
+ #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/python-conf.el
+   ;;; python-conf -*- lexical-binding: t; -*-
 
-   (use-package py-autopep8
-      :config
-      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+   (use-package elpy
+     :straight t
+     :defer t
+     :init
+     (advice-add 'python-mode :before #'elpy-enable)
+     :config
+     (when (require 'flycheck nil t)
+       (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+       ))
 
-    (use-package ein
-      :config
-	(setq python-shell-interpreter "ipython"
-	      python-shell-interpreter-arg "-i --simple-prompt"))
-#+END_SRC
+    (use-package py-autopep8
+       :config
+       (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 
-** HTML/CSS support
+     (use-package ein
+       :config
+	 (setq python-shell-interpreter "ipython"
+	       python-shell-interpreter-arg "-i --simple-prompt"))
+ #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/webdev-conf.el
-  ;;; webdev-conf.el -*- lexical-binding: t; -*-
+*** HTML/CSS support
 
-    (use-package web-mode
-      :straight t
-      :init
-      (setq web-mode-enable-current-element-highlight t
-	    web-mode-enable-current-column-highlight t)
-      :mode
-      (("\\.phtml\\'" . web-mode)
-       ("\\.tpl\\.php\\'" . web-mode)
-       ("\\.[agj]sp\\'" . web-mode)
-       ("\\.as[cp]x\\'" . web-mode)
-       ("\\.erb\\'" . web-mode)
-       ("\\.mustache\\'" . web-mode)
-       ("\\.djhtml\\'" . web-mode)
-       ("\\.html?\\'" . web-mode)
-       ("\\.css\\'" . web-mode))
-      :config
-      (setq  web-mode-markup-indent-offset 2
-	     web-mode-css-indent-offset 2
-	     web-mode-code-indent-offset 2
-	     web-mode-style-padding 1
-	     web-mode-script-padding 1
-	     web-mode-block-padding 0
-	     web-mode-enable-auto-pairing t
-	     web-mode-enable-css-colorization t
-	     web-mode-enable-part-face t
-	     web-mode-comment-keywords t
-	     web-mode-enable-heredoc-fontification t)
-      (set-face-attribute 'web-mode-css-at-rule-face nil :foreground "Pink3")
+ #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/webdev-conf.el
+   ;;; webdev-conf.el -*- lexical-binding: t; -*-
+
+     (use-package web-mode
+       :straight t
+       :init
+       (setq web-mode-enable-current-element-highlight t
+	     web-mode-enable-current-column-highlight t)
+       :mode
+       (("\\.phtml\\'" . web-mode)
+	("\\.tpl\\.php\\'" . web-mode)
+	("\\.[agj]sp\\'" . web-mode)
+	("\\.as[cp]x\\'" . web-mode)
+	("\\.erb\\'" . web-mode)
+	("\\.mustache\\'" . web-mode)
+	("\\.djhtml\\'" . web-mode)
+	("\\.html?\\'" . web-mode)
+	("\\.css\\'" . web-mode))
+
+       :config
+       (setq  web-mode-markup-indent-offset 2
+	      web-mode-css-indent-offset 2
+	      web-mode-code-indent-offset 2
+	      web-mode-style-padding 1
+	      web-mode-script-padding 1
+	      web-mode-block-padding 0
+	      web-mode-enable-auto-pairing t
+	      web-mode-enable-css-colorization t
+	      web-mode-enable-part-face t
+	      web-mode-comment-keywords t
+	      web-mode-enable-heredoc-fontification t)
+       (set-face-attribute 'web-mode-css-at-rule-face nil :foreground "Pink3")
+       )
+
+     ;; Configure Emmet-mode and attach it to Web-mode.
+
+     (use-package emmet-mode
+       :straight t
+       :config
+       (setq emmet-self-closing-tag-style "")
+       :hook (web-mode))
+
+
+     ;; Configure Skewer-mode
+
+     (use-package skewer-mode
+       :straight t
+       :init
+       (add-hook 'web-mode-hook 'my-skewer-enable)
+       :hook
+       (web-mode))
+
+     (use-package impatient-mode
+       :straight t
+       :hook
+       (web-mode))
+
+     (use-package lorem-ipsum)
+ #+END_SRC
+
+*** Javascript Support
+
+    #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/js-conf.el
+      ;; js-conf.el -*- lexical-binding: t; -*-
+
+      ;; Install js2-mode for better javascript editing
+
+      (use-package js2-mode
+	:straight t
+	:defer t
+	:interpreter "node"
+	:config
+	(add-hook 'js-mode-hook js2-minor-mode)
       )
 
-    ;; Configure Emmet-mode and attach it to Web-mode.
+      (use-package xref-js2
+	:straight t
+	:after js2-mode
+	:defer t
+	:config
+	(add-hook 'js-mode-hook (lambda ()
+				   (add-hook 'xref-backend-functions #'xref-js2-xref-backend))))
 
-    (use-package emmet-mode
-      :straight t
-      :config
-      (setq emmet-self-closing-tag-style "")
-      :hook (web-mode))
+      (use-package js2-refactor
+	:straight t
+	:defer t
+	:after js2-mode
+	:config
+	(add-hook 'js-mode-hook js2-refactor-mode))
 
+      (use-package tide
+	:straight t
+	:after (company flycheck company-tide)
+	:hook
+	((js-mode . tide-setup)
+	 (js-mode . tide-hl-identifier-mode)
+	 (before-save . tide-format-before-save))
+	:config
+	(add-to-list 'company-backends 'company-tide)
+	)
 
-    ;; Configure Skewer-mode
-
-    (use-package skewer-mode
-      :straight t
-      :init
-      (add-hook 'web-mode-hook 'my-skewer-enable)
-      :hook
-      (web-mode))
-
-    (use-package impatient-mode
-      :straight t
-      :hook
-      (web-mode))
-
-    (use-package lorem-ipsum)
 #+END_SRC
 
+
+*** PHP Support 
+
+ #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/php-conf.el
+   ;; php-conf.el -*- lexical-binding: t; -*-
+
+   ;; Install php-mode
+
+   (use-package php-mode
+     :straight t
+     :defer t
+     :mode
+     (("\\.php\\'" . php-mode))
+     :config
+     (add-hook 'php-mode-hook (lambda ()
+			       (add-to-list 'company-backends 'company-ac-php-backend))))
+
+   ;; Auto-completion support
+
+   (use-package company-php
+     :straight t
+     :defer t
+     )
+ #+END_SRC
+
+    
 ** Org mode extended support
 
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/org-conf.el
@@ -794,12 +867,13 @@
 			    '(("^ *\\([-]\\) "
 			       (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
     (let* ((variable-tuple
-	    (cond
-	     ((x-list-fonts "Fira Code") '(:font "Fira Code"))
-	     ((x-list-fonts "Iosveka") '(:font "Iosveka"))
-	     ((x-list-fonts "Verdana") '(:font "Verdana"))
-	     ((x-family-fonts "Sans Serif") '(:family "Sans Serif"))
-	     (nil (warn "Can't find a Sans Serif Font. Please install Source Sans Pro."))))
+	    (when (display-graphic-p)
+		(cond
+		 ((x-list-fonts "Fira Code") '(:font "Fira Code"))
+		 ((x-list-fonts "Iosveka") '(:font "Iosveka"))
+		 ((x-list-fonts "Verdana") '(:font "Verdana"))
+		 ((x-family-fonts "Sans Serif") '(:family "Sans Serif"))
+		 (nil (warn "Can't find a Sans Serif Font. Please install Source Sans Pro.")))))
 	   (base-font-color (face-foreground 'default nil 'default))
 	   (headline `(:inherit default :weight bold :foreground ,base-font-color)))
       (custom-theme-set-faces
