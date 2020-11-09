@@ -29,6 +29,7 @@
 	   web-mode-comment-keywords t
 	   web-mode-enable-heredoc-fontification t)
     (set-face-attribute 'web-mode-css-at-rule-face nil :foreground "Pink3")
+    (add-to-list 'company-backends '(company-css company-web-html))
     )
 
   ;; Configure Emmet-mode and attach it to Web-mode.

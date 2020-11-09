@@ -52,7 +52,7 @@
        (treemacs-git-mode 'simple))))
   :bind
   (:map global-map
-	([f3] . treemacs)
+	("C-<f3>" . treemacs)
 	("M-0" . treemacs-select-window))
   )
 

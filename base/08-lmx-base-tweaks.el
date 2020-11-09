@@ -77,8 +77,8 @@
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))
 	dashboard-set-heading-icons 1
 	dashboard-set-file-icons 1
-	dashboard-items '((projects . 5)
-			  (recents . 5)
+	dashboard-items '((recents . 5)
+			  (projects . 5)
 			  (bookmarks . 5)
 			  (agenda .5))
 	dashboard-set-navigator 1

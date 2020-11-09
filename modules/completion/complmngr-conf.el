@@ -12,6 +12,7 @@
   :bind
   (
    ("C-s" . 'swiper-isearch)
+   ("C-r" . 'swiper-isearch-backward)
    ("M-x" . 'counsel-M-x)
    ("C-x C-f" . 'counsel-find-file)
    ("M-y" . 'counsel-yank-pop)
@@ -75,7 +76,7 @@
 	company-global-modes '(not help-mode gud-mode message-mode erc-mode))
 
   :bind
-  ("M-C-<space>" . 'company-complete))
+  ("M-C-i" . 'company-complete))
 
 (use-package company-web
   :straight t

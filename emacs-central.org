@@ -36,6 +36,7 @@
   (load (concat user-emacs-directory "modules/lang/python-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/lang/php-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/lang/js-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/lang/csharp-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/tools/org-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/tools/pdf-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/net/irc-conf.el") nil 'nomessage)
@@ -371,8 +372,8 @@
     (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))
 	  dashboard-set-heading-icons 1
 	  dashboard-set-file-icons 1
-	  dashboard-items '((projects . 5)
-			    (recents . 5)
+	  dashboard-items '((recents . 5)
+			    (projects . 5)
 			    (bookmarks . 5)
 			    (agenda .5))
 	  dashboard-set-navigator 1
@@ -527,7 +528,7 @@
 	 (treemacs-git-mode 'simple))))
     :bind
     (:map global-map
-	  ([f3] . treemacs)
+	  ("C-<f3>" . treemacs)
 	  ("M-0" . treemacs-select-window))
     )
 
@@ -563,6 +564,7 @@
     :bind
     (
      ("C-s" . 'swiper-isearch)
+     ("C-r" . 'swiper-isearch-backward)
      ("M-x" . 'counsel-M-x)
      ("C-x C-f" . 'counsel-find-file)
      ("M-y" . 'counsel-yank-pop)
@@ -626,7 +628,7 @@
 	  company-global-modes '(not help-mode gud-mode message-mode erc-mode))
 
     :bind
-    ("M-C-<space>" . 'company-complete))
+    ("M-C-i" . 'company-complete))
 
   (use-package company-web
     :straight t
@@ -754,6 +756,7 @@
 	      web-mode-comment-keywords t
 	      web-mode-enable-heredoc-fontification t)
        (set-face-attribute 'web-mode-css-at-rule-face nil :foreground "Pink3")
+       (add-to-list 'company-backends '(company-css company-web-html))
        )
 
      ;; Configure Emmet-mode and attach it to Web-mode.
@@ -825,7 +828,6 @@
 
 #+END_SRC
 
-
 *** PHP Support 
 
  #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/php-conf.el
@@ -851,6 +853,30 @@
  #+END_SRC
 
     
+*** Csharp Support
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/csharp-conf.el
+  ;; csharp-conf.el -*- lexical-binding: t; -*-
+
+  (use-package csharp-mode
+    :straight t
+    :defer t
+    :config
+    (add-hook 'csharp-mode-hook 'flycheck-mode))
+
+  (use-package csproj-mode
+    :straight t
+    :defer t)
+
+  (use-package omnisharp
+    :straight t
+    :defer t
+    :config
+    (add-to-list 'company-backends 'company-omnisharp)
+    (add-hook 'csharp-mode-hook 'omnisharp-mode))
+  
+
+#+END_SRC
+
 ** Org mode extended support
 
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/org-conf.el
