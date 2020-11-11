@@ -13,7 +13,7 @@
 (add-hook 'after-make-frame-functions (lambda (frame) (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")))
 (add-to-list 'default-frame-alist
 	     '(font . "Fira Code-11"))
-(add-hook 'after-init-hook 'my-set-fira-code-ligatures)
+;; (add-hook 'after-init-hook 'my-set-fira-code-ligatures)
 
 ;; Theme settings
 (lmx-load-theme 'doom-acario-dark)

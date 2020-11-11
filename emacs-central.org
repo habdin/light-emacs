@@ -22,6 +22,7 @@
   (load (concat user-emacs-directory "base/08-lmx-base-tweaks.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/09-bufmngr-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/10-prjmngr-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "base/11-ligatures-conf.el") nil 'nomessage)
 
 
   ;; LMX Mouules config files section
@@ -169,42 +170,42 @@
   ;; The next functions configure fira-code font workaround for proper
   ;; Emacs integration.
 
-  (defun my-correct-symbol-bounds (pretty-alist)
-    "Prepend a TAB character to each symbol in this alist,
-		this way compose-region called by prettify-symbols-mode
-		will use the correct width of the symbols
-		instead of the width measured by char-width."
-    (mapcar (lambda (el)
-	      (setcdr el (string ?\t (cdr el)))
-	      el)
-	    pretty-alist))
+  ;; (defun my-correct-symbol-bounds (pretty-alist)
+  ;;   "Prepend a TAB character to each symbol in this alist,
+  ;; 	      this way compose-region called by prettify-symbols-mode
+  ;; 	      will use the correct width of the symbols
+  ;; 	      instead of the width measured by char-width."
+  ;;   (mapcar (lambda (el)
+  ;; 	    (setcdr el (string ?\t (cdr el)))
+  ;; 	    el)
+  ;; 	  pretty-alist))
 
-  (defun my-ligature-list (ligatures codepoint-start)
-    "Create an alist of strings to replace with
-		codepoints starting from codepoint-start."
-    (let ((codepoints (-iterate '1+ codepoint-start (length ligatures))))
-      (-zip-pair ligatures codepoints)))
+  ;; (defun my-ligature-list (ligatures codepoint-start)
+  ;;   "Create an alist of strings to replace with
+  ;; 	      codepoints starting from codepoint-start."
+  ;;   (let ((codepoints (-iterate '1+ codepoint-start (length ligatures))))
+  ;;     (-zip-pair ligatures codepoints)))
 
-  (setq my-fira-code-ligatures
-	(let* ((ligs '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
-		       "{-" "[]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
-		       "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
-		       "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
-		       ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
-		       "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
-		       "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
-		       "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
-		       ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
-		       "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
-		       "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
-		       "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
-		       "x" ":" "+" "+" "*")))
-	  (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
+  ;; (setq my-fira-code-ligatures
+  ;;       (let* ((ligs '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
+  ;; 		     "{-" "[]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
+  ;; 		     "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
+  ;; 		     "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
+  ;; 		     ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
+  ;; 		     "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
+  ;; 		     "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
+  ;; 		     "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
+  ;; 		     ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
+  ;; 		     "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
+  ;; 		     "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
+  ;; 		     "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
+  ;; 		     "x" ":" "+" "+" "*")))
+  ;; 	(my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
 
-  (defun my-set-fira-code-ligatures ()
-    (setq prettify-symbols-alist
-	  (append my-fira-code-ligatures prettify-symbols-alist))
-    (prettify-symbols-mode))
+  ;; (defun my-set-fira-code-ligatures ()
+  ;;   (setq prettify-symbols-alist
+  ;; 	(append my-fira-code-ligatures prettify-symbols-alist))
+  ;;   (prettify-symbols-mode))
 
   (defun my-check-extension (extension)
     "Check the file extension for the current buffer filename"
@@ -277,7 +278,7 @@
   (add-hook 'after-make-frame-functions (lambda (frame) (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")))
   (add-to-list 'default-frame-alist
 	       '(font . "Fira Code-11"))
-  (add-hook 'after-init-hook 'my-set-fira-code-ligatures)
+  ;; (add-hook 'after-init-hook 'my-set-fira-code-ligatures)
 
   ;; Theme settings
   (lmx-load-theme 'doom-acario-dark)
@@ -421,6 +422,59 @@
     :straight t
     :bind
     ("M-o" . ace-window))
+#+END_SRC
+
+*** Ligature Support
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/11-ligatures-conf.el
+  ;; 11-ligatures-conf.el ;; -*- lexical-binding: t; -*- ;;
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Emacs version greater than 27.x running on GUI includes support for harfbuzz to properly   ;;
+  ;; show ligatures and other utf-8 characters that can't 'directly' be shown on emacs versions ;;
+  ;; earlier than 27.x.									      ;;
+  ;; 											      ;;
+  ;; Users on emacs greater than 27.x can without any workaround instructions show	      ;;
+  ;; ligatures and emojis just by using a font that has these characters defined into it. In    ;;
+  ;; order to get the same result on earlier emacs versions, some workaround instructions are   ;;
+  ;; present on https://github.com/tonsky/FiraCode/wiki/Emacs-instructions and		      ;;
+  ;; https://github.com/microsoft/cascadia-code/issues/153.				      ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+  ;; Check if Emacs is running on X-window system and execute code for ligature support
+  ;; only for GUI-based Emacs.
+  (when (window-system)
+
+    ;; Check for Emacs version less than or equal to 27.x
+    (if (version<= "27.0" emacs-version)
+
+	;; Workaround instructions for Emacs versions prior to 27.x
+	(use-package fira-code-mode
+	  :defer t
+	  :straight t
+	  :config
+	  (add-hook 'after-init-hook #'fira-code-mode)
+	  )
+
+      ;; Enable ligature via the ligature.el melpa package
+      (use-package ligature
+	:defer t
+	:straight t
+	:config
+	;; Enable ligatures in programming modes                                                           
+	(ligature-set-ligatures 'prog-mode '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
+					     ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
+					     "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
+					     "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
+					     "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
+					     "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
+					     "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
+					     "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
+					     "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
+					     "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
+
+	(global-ligature-mode 't))
+      ))
 #+END_SRC
 
 ** Project Manager settings
@@ -691,8 +745,13 @@
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/prog/prog-conf.el
   ;;; prog-conf.el -*- lexical-binding: t; -*-
 
-  (dolist (attach '(my-set-fira-code-ligatures display-line-numbers-mode))
-    (add-hook 'prog-mode-hook attach))
+  ;; (dolist (attach '(my-set-fira-code-ligatures display-line-numbers-mode))
+  ;;  (add-hook 'prog-mode-hook attach))
+
+  (if (version<= "26.1" emacs-version)
+      (add-hook 'prog-mode-hook #'linum-mode)
+    (add-hook 'prog-mode-hook #'display-line-numbers-mode))
+
 #+END_SRC
 
 ** Programming language Support

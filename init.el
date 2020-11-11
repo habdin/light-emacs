@@ -12,6 +12,7 @@
 (load (concat user-emacs-directory "base/08-lmx-base-tweaks.el") nil 'nomessage)
 (load (concat user-emacs-directory "base/09-bufmngr-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "base/10-prjmngr-conf.el") nil 'nomessage)
+(load (concat user-emacs-directory "base/11-ligatures-conf.el") nil 'nomessage)
 
 
 ;; LMX Mouules config files section
