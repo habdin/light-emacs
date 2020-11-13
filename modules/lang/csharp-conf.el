@@ -13,6 +13,6 @@
 (use-package omnisharp
   :straight t
   :defer t
+  :hook ((csharp-mode . omnisharp-mode))
   :config
-  (add-to-list 'company-backends 'company-omnisharp)
-  (add-hook 'csharp-mode-hook 'omnisharp-mode))
+  (add-to-list 'company-backends 'company-omnisharp))

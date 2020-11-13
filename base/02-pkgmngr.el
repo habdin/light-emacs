@@ -60,3 +60,8 @@
 	       '("melpa" . "http://melpa.org/packages/") t)
   (add-to-list 'package-archives
 	       '("org" . "http://orgmode.org/elpa/") t))
+
+;; Install epkg to view packages in Emacsmirror
+(use-package epkg
+  :defer t
+  :straight t)
