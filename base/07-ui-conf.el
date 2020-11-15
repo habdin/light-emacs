@@ -23,4 +23,5 @@
 
 ;; Always indicate empty lines within files and buffers
 (setq default-indicate-empty-lines t)
-(set-fringe-mode 4)
+(when (display-graphic-p)
+  (set-fringe-mode 4))
