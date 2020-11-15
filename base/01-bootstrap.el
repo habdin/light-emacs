@@ -7,11 +7,12 @@
 (setq package-enable-at-startup nil)
 (advice-add #'package--ensure-init-file :override #'ignore)
 
-(when (display-graphic-p)
-  (tool-bar-mode 0)
-  (menu-bar-mode 0)
-  (scroll-bar-mode 0)
-)
+(menu-bar-mode 0)
+
+(when (fboundp 'tool-bar-mode)
+    (tool-bar-mode 0))
+(when (fboundp 'scroll-bar-mode)
+    (scroll-bar-mode 0))
 
 ;; Hide Emacs Startup screen
 
