@@ -3,6 +3,8 @@
 ;; (dolist (attach '(my-set-fira-code-ligatures display-line-numbers-mode))
 ;;  (add-hook 'prog-mode-hook attach))
 
-(if (version<= "26.1" emacs-version)
-    (add-hook 'prog-mode-hook #'linum-mode)
-  (add-hook 'prog-mode-hook #'display-line-numbers-mode))
+(setq display-line-numbers-type 'relative)
+(add-hook 'prog-mode-hook
+	  (if (fboundp 'display-line-numbers-mode)
+	      #'display-line-numbers-mode
+	  #'linum-mode))

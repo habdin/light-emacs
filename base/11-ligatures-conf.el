@@ -17,31 +17,26 @@
 (use-package fira-code-mode
   :defer t
   :straight t
-
-
   )
 
 ;; Enable ligature via the ligature.el melpa package
 (use-package ligature
   :defer t
   :straight (ligature :type git :host github :repo "mickeynp/ligature.el")
-  )
+  :config
+  (ligature-set-ligatures 'prog-mode '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
+				       ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
+				       "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
+				       "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
+				       "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
+				       "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
+				       "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
+				       "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
+				       "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
+				       "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%")))
 
-;; Check if Emacs is running on X-window system and execute code for ligature support
-;; only for GUI-based Emacs.
 (when (window-system)
-
-  ;; Check for Emacs version less than or equal to 27.x
-  (if (version<= "27.0" emacs-version)
-      (add-hook 'prog-mode-hook #'fira-code-mode)
-    ;; Enable ligatures in programming modes                                                           
-    (ligature-set-ligatures 'prog-mode '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
-					 ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
-					 "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
-					 "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
-					 "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
-					 "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
-					 "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
-					 "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
-					 "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
-					 "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))))
+  (add-hook 'prog-mode-hook
+	    (if (featurep 'harfbuzz)
+		#'ligature-mode
+	      #'fira-code-mode)))

@@ -10,11 +10,17 @@
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
     ))
 
- (use-package py-autopep8
-    :config
-    (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+(use-package pyvenv
+  :straight t
+  :defer t
+  :config
+  (advice-add 'python-mode :before #'pyvenv-mode))
 
-  (use-package ein
-    :config
-      (setq python-shell-interpreter "ipython"
-	    python-shell-interpreter-arg "-i --simple-prompt"))
+(use-package py-autopep8
+  :config
+  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+
+(use-package ein
+  :config
+  (setq python-shell-interpreter "ipython"
+	python-shell-interpreter-arg "-i --simple-prompt"))

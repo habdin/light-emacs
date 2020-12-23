@@ -454,34 +454,29 @@
   (use-package fira-code-mode
     :defer t
     :straight t
-
-
     )
 
   ;; Enable ligature via the ligature.el melpa package
   (use-package ligature
     :defer t
     :straight (ligature :type git :host github :repo "mickeynp/ligature.el")
-    )
+    :config
+    (ligature-set-ligatures 'prog-mode '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
+					 ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
+					 "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
+					 "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
+					 "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
+					 "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
+					 "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
+					 "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
+					 "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
+					 "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%")))
 
-  ;; Check if Emacs is running on X-window system and execute code for ligature support
-  ;; only for GUI-based Emacs.
   (when (window-system)
-
-    ;; Check for Emacs version less than or equal to 27.x
-    (if (version<= "27.0" emacs-version)
-	(add-hook 'prog-mode-hook #'fira-code-mode)
-      ;; Enable ligatures in programming modes                                                           
-      (ligature-set-ligatures 'prog-mode '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
-					   ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
-					   "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
-					   "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
-					   "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
-					   "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
-					   "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
-					   "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
-					   "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
-					   "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))))
+    (add-hook 'prog-mode-hook
+	      (if (featurep 'harfbuzz)
+		  #'ligature-mode
+		#'fira-code-mode)))
 #+END_SRC
 
 ** Project Manager settings
@@ -755,9 +750,11 @@
   ;; (dolist (attach '(my-set-fira-code-ligatures display-line-numbers-mode))
   ;;  (add-hook 'prog-mode-hook attach))
 
-  (if (version<= "26.1" emacs-version)
-      (add-hook 'prog-mode-hook #'linum-mode)
-    (add-hook 'prog-mode-hook #'display-line-numbers-mode))
+  (setq display-line-numbers-type 'relative)
+  (add-hook 'prog-mode-hook
+	    (if (fboundp 'display-line-numbers-mode)
+		#'display-line-numbers-mode
+	    #'linum-mode))
 
 #+END_SRC
 
@@ -778,14 +775,20 @@
        (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
        ))
 
-    (use-package py-autopep8
-       :config
-       (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+   (use-package pyvenv
+     :straight t
+     :defer t
+     :config
+     (advice-add 'python-mode :before #'pyvenv-mode))
 
-     (use-package ein
-       :config
-	 (setq python-shell-interpreter "ipython"
-	       python-shell-interpreter-arg "-i --simple-prompt"))
+   (use-package py-autopep8
+     :config
+     (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+
+   (use-package ein
+     :config
+     (setq python-shell-interpreter "ipython"
+	   python-shell-interpreter-arg "-i --simple-prompt"))
  #+END_SRC
 
 *** HTML/CSS support
@@ -862,16 +865,16 @@
 	:straight t
 	:defer t
 	:interpreter "node"
-	:config
-	(add-hook 'js-mode-hook js2-minor-mode)
-      )
+	:mode
+	(("\\.js\\'" . js2-mode))
+	)
 
       (use-package xref-js2
 	:straight t
 	:after js2-mode
 	:defer t
 	:config
-	(add-hook 'js-mode-hook (lambda ()
+	(add-hook 'js2-mode-hook (lambda ()
 				   (add-hook 'xref-backend-functions #'xref-js2-xref-backend))))
 
       (use-package js2-refactor
@@ -879,14 +882,14 @@
 	:defer t
 	:after js2-mode
 	:config
-	(add-hook 'js-mode-hook js2-refactor-mode))
+	(add-hook 'js2-mode-hook js2-refactor-mode))
 
       (use-package tide
 	:straight t
 	:after (company flycheck company-tide)
 	:hook
-	((js-mode . tide-setup)
-	 (js-mode . tide-hl-identifier-mode)
+	((js2-mode . tide-setup)
+	 (js2-mode . tide-hl-identifier-mode)
 	 (before-save . tide-format-before-save))
 	:config
 	(add-to-list 'company-backends 'company-tide)
