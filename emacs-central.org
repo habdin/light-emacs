@@ -420,6 +420,7 @@
     (setq which-key-popup-type 'side-window
 	  which-key-side-window-location 'bottom)
     )
+
 #+END_SRC
 
 *** Buffer Manager settings
@@ -431,6 +432,11 @@
     :straight t
     :bind
     ("M-o" . ace-window))
+
+  (use-package ibuffer
+    :bind
+    ("C-x C-b" . 'ibuffer))
+
 #+END_SRC
 
 *** Ligature Support
@@ -803,6 +809,7 @@
 	     web-mode-enable-current-column-highlight t)
        :mode
        (("\\.phtml\\'" . web-mode)
+	("\\.cshtml\\'" . web-mode)
 	("\\.tpl\\.php\\'" . web-mode)
 	("\\.[agj]sp\\'" . web-mode)
 	("\\.as[cp]x\\'" . web-mode)

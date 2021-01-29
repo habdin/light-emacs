@@ -4,3 +4,7 @@
   :straight t
   :bind
   ("M-o" . ace-window))
+
+(use-package ibuffer
+  :bind
+  ("C-x C-b" . 'ibuffer))

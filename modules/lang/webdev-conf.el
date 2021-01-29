@@ -7,6 +7,7 @@
 	  web-mode-enable-current-column-highlight t)
     :mode
     (("\\.phtml\\'" . web-mode)
+     ("\\.cshtml\\'" . web-mode)
      ("\\.tpl\\.php\\'" . web-mode)
      ("\\.[agj]sp\\'" . web-mode)
      ("\\.as[cp]x\\'" . web-mode)
