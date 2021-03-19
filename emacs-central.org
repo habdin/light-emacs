@@ -40,6 +40,7 @@
   (load (concat user-emacs-directory "modules/lang/csharp-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/tools/org-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/tools/pdf-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/tools/treesitter-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/net/irc-conf.el") nil 'nomessage)
 #+END_SRC
 
@@ -608,6 +609,31 @@
     :config
     (treemacs-set-scope-type 'Perspectives))
 #+END_SRC
+
+** Tree-sitter support
+
+#+begin_src emacs-lisp :mkdirp yes :tangle modules/tools/treesitter-conf.el
+  ;; treesitter-conf.el -*- lexical-binding: t; -*-
+
+  (use-package tree-sitter
+    :straight t
+    :hook (prog-mode . tree-sitter-mode)
+    :config
+    (add-hook 'tree-sitter-mode-hook #'tree-sitter-hl-mode)
+    )
+
+  (use-package tree-sitter-langs
+    :straight t
+    :after tree-sitter
+    )
+
+  (use-package tree-sitter-indent
+    :straight t
+    :after tree-sitter
+    )
+
+#+end_src
+
 
 ** Auto Completion settings
 

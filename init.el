@@ -30,4 +30,5 @@
 (load (concat user-emacs-directory "modules/lang/csharp-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/tools/org-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/tools/pdf-conf.el") nil 'nomessage)
+(load (concat user-emacs-directory "modules/tools/treesitter-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/net/irc-conf.el") nil 'nomessage)
