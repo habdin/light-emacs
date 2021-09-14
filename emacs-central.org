@@ -27,7 +27,6 @@
 
   ;; LMX Mouules config files section
 
-  (load (concat user-emacs-directory "modules/tools/vc-conf") nil 'nomessage)
   (load (concat user-emacs-directory "modules/file-manager/treemacs.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/completion/complmngr-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/prog/snippets-conf.el") nil 'nomessage)
@@ -38,10 +37,14 @@
   (load (concat user-emacs-directory "modules/lang/php-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/lang/js-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/lang/csharp-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/tools/vc-conf") nil 'nomessage)
   (load (concat user-emacs-directory "modules/tools/org-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/tools/pdf-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "modules/tools/evil_mode-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/tools/treesitter-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/net/irc-conf.el") nil 'nomessage)
+
+
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle base/01-bootstrap.el
@@ -238,7 +241,7 @@
   (use-package doom-modeline
 	       :straight t
 	       :init (doom-modeline-mode 1)
-	       (setq doom-modeline-height 16)
+	       (setq doom-modeline-height 25)
 	       (column-number-mode t)
 	       :config
 	       (if (daemonp)
@@ -299,6 +302,7 @@
   (setq default-indicate-empty-lines t)
   (when (fboundp 'fringe-mode)
     (set-fringe-mode 4))
+
 #+END_SRC
 
 *** Enhanced base functionality
@@ -385,8 +389,7 @@
 	  dashboard-set-file-icons 1
 	  dashboard-items '((recents . 5)
 			    (projects . 5)
-			    (bookmarks . 5)
-			    (agenda .5))
+			    (bookmarks . 5))
 	  dashboard-set-navigator 1
 	  dashboard-center-content 1
 	  dashboard-navigator-buttons `(;; line1
@@ -503,37 +506,6 @@
 #+END_SRC
 
 * LMX Modules configuration
-** Version control
-
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/vc-conf.el
-  ;; vc-conf.el -*- lexical-binding: t; -*-
-
-  (use-package magit
-    :straight t)
-
-  (use-package magit-gh-pulls
-    :straight t
-    :defer t
-    :config
-    (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
-
-  (use-package magit-gitflow
-    :straight t)
-
-  (use-package magit-imerge
-    :straight t)
-
-  (use-package magithub
-    :straight t)
-
-  (use-package diff-hl
-    :straight t
-    :defer t
-    :config
-    (global-diff-hl-mode))
-
-#+END_SRC
-
 ** File Manager settings
 
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/file-manager/treemacs.el
@@ -609,31 +581,6 @@
     :config
     (treemacs-set-scope-type 'Perspectives))
 #+END_SRC
-
-** Tree-sitter support
-
-#+begin_src emacs-lisp :mkdirp yes :tangle modules/tools/treesitter-conf.el
-  ;; treesitter-conf.el -*- lexical-binding: t; -*-
-
-  (use-package tree-sitter
-    :straight t
-    :hook (prog-mode . tree-sitter-mode)
-    :config
-    (add-hook 'tree-sitter-mode-hook #'tree-sitter-hl-mode)
-    )
-
-  (use-package tree-sitter-langs
-    :straight t
-    :after tree-sitter
-    )
-
-  (use-package tree-sitter-indent
-    :straight t
-    :after tree-sitter
-    )
-
-#+end_src
-
 
 ** Auto Completion settings
 
@@ -736,28 +683,6 @@
 
 #+END_SRC
 
-** Snippets system
-
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/prog/snippets-conf.el
-  ;;; snippets-conf.el -*- lexical-binding: t; -*-
-
-  (use-package yasnippet
-    :straight t
-    :defer t
-    :config
-    (add-hook 'after-init-hook #'yas-reload-all)
-    :init
-    (yas-global-mode t)
-    )
-
-  (use-package yasnippet-snippets
-    :straight t
-    :after yasnippet)
-
-
-
-#+END_SRC
-
 ** Checkers system
 
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/checkers/checkers-conf.el
@@ -774,276 +699,374 @@
     
 #+END_SRC
 
-** General Programming Support
+** Programming
+   
+*** General Programming Support
 
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/prog/prog-conf.el
-  ;;; prog-conf.el -*- lexical-binding: t; -*-
+ #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/prog/prog-conf.el
+   ;;; prog-conf.el -*- lexical-binding: t; -*-
 
-  ;; (dolist (attach '(my-set-fira-code-ligatures display-line-numbers-mode))
-  ;;  (add-hook 'prog-mode-hook attach))
+   ;; (dolist (attach '(my-set-fira-code-ligatures display-line-numbers-mode))
+   ;;  (add-hook 'prog-mode-hook attach))
 
-  (setq display-line-numbers-type 'relative)
-  (add-hook 'prog-mode-hook
-	    (if (fboundp 'display-line-numbers-mode)
-		#'display-line-numbers-mode
-	    #'linum-mode))
+   (setq display-line-numbers-type 'relative)
+   (add-hook 'prog-mode-hook
+	     (if (fboundp 'display-line-numbers-mode)
+		 #'display-line-numbers-mode
+	     #'linum-mode))
 
-#+END_SRC
+ #+END_SRC
 
-** Programming language Support
+*** Snippets system
 
-*** Python support
+ #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/prog/snippets-conf.el
+   ;;; snippets-conf.el -*- lexical-binding: t; -*-
 
- #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/python-conf.el
-   ;;; python-conf -*- lexical-binding: t; -*-
-
-   (use-package elpy
+   (use-package yasnippet
      :straight t
      :defer t
+     :config
+     (add-hook 'after-init-hook #'yas-reload-all)
      :init
-     (advice-add 'python-mode :before #'elpy-enable)
-     :config
-     (when (require 'flycheck nil t)
-       (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-       ))
-
-   (use-package pyvenv
-     :straight t
-     :defer t
-     :config
-     (advice-add 'python-mode :before #'pyvenv-mode))
-
-   (use-package py-autopep8
-     :config
-     (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
-
-   (use-package ein
-     :config
-     (setq python-shell-interpreter "ipython"
-	   python-shell-interpreter-arg "-i --simple-prompt"))
- #+END_SRC
-
-*** HTML/CSS support
-
- #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/webdev-conf.el
-   ;;; webdev-conf.el -*- lexical-binding: t; -*-
-
-     (use-package web-mode
-       :straight t
-       :init
-       (setq web-mode-enable-current-element-highlight t
-	     web-mode-enable-current-column-highlight t)
-       :mode
-       (("\\.phtml\\'" . web-mode)
-	("\\.cshtml\\'" . web-mode)
-	("\\.tpl\\.php\\'" . web-mode)
-	("\\.[agj]sp\\'" . web-mode)
-	("\\.as[cp]x\\'" . web-mode)
-	("\\.erb\\'" . web-mode)
-	("\\.mustache\\'" . web-mode)
-	("\\.djhtml\\'" . web-mode)
-	("\\.html?\\'" . web-mode)
-	("\\.css\\'" . web-mode))
-
-       :config
-       (setq  web-mode-markup-indent-offset 2
-	      web-mode-css-indent-offset 2
-	      web-mode-code-indent-offset 2
-	      web-mode-style-padding 1
-	      web-mode-script-padding 1
-	      web-mode-block-padding 0
-	      web-mode-enable-auto-pairing t
-	      web-mode-enable-css-colorization t
-	      web-mode-enable-part-face t
-	      web-mode-comment-keywords t
-	      web-mode-enable-heredoc-fontification t)
-       (set-face-attribute 'web-mode-css-at-rule-face nil :foreground "Pink3")
-       (add-to-list 'company-backends '(company-css company-web-html))
-       )
-
-     ;; Configure Emmet-mode and attach it to Web-mode.
-
-     (use-package emmet-mode
-       :straight t
-       :config
-       (setq emmet-self-closing-tag-style "")
-       :hook (web-mode))
-
-
-     ;; Configure Skewer-mode
-
-     (use-package skewer-mode
-       :straight t
-       :init
-       (add-hook 'web-mode-hook 'my-skewer-enable)
-       :hook
-       (web-mode))
-
-     (use-package impatient-mode
-       :straight t
-       :hook
-       (web-mode))
-
-     (use-package lorem-ipsum)
- #+END_SRC
-
-*** Javascript Support
-
-    #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/js-conf.el
-      ;; js-conf.el -*- lexical-binding: t; -*-
-
-      ;; Install js2-mode for better javascript editing
-
-      (use-package js2-mode
-	:straight t
-	:defer t
-	:interpreter "node"
-	:mode
-	(("\\.js\\'" . js2-mode))
-	)
-
-      (use-package xref-js2
-	:straight t
-	:after js2-mode
-	:defer t
-	:config
-	(add-hook 'js2-mode-hook (lambda ()
-				   (add-hook 'xref-backend-functions #'xref-js2-xref-backend))))
-
-      (use-package js2-refactor
-	:straight t
-	:defer t
-	:after js2-mode
-	:config
-	(add-hook 'js2-mode-hook js2-refactor-mode))
-
-      (use-package tide
-	:straight t
-	:after (company flycheck company-tide)
-	:hook
-	((js2-mode . tide-setup)
-	 (js2-mode . tide-hl-identifier-mode)
-	 (before-save . tide-format-before-save))
-	:config
-	(add-to-list 'company-backends 'company-tide)
-	)
-
-#+END_SRC
-
-*** PHP Support 
-
- #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/php-conf.el
-   ;; php-conf.el -*- lexical-binding: t; -*-
-
-   ;; Install php-mode
-
-   (use-package php-mode
-     :straight t
-     :defer t
-     :mode
-     (("\\.php\\'" . php-mode))
-     :config
-     (add-hook 'php-mode-hook (lambda ()
-			       (add-to-list 'company-backends 'company-ac-php-backend))))
-
-   ;; Auto-completion support
-
-   (use-package company-php
-     :straight t
-     :defer t
+     (yas-global-mode t)
      )
+
+   (use-package yasnippet-snippets
+     :straight t
+     :after yasnippet)
+
+
+
  #+END_SRC
 
+*** Programming language Support
+**** Python support
+
+  #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/python-conf.el
+    ;;; python-conf -*- lexical-binding: t; -*-
+
+    (use-package elpy
+      :straight t
+      :defer t
+      :init
+      (advice-add 'python-mode :before #'elpy-enable)
+      :config
+      (when (require 'flycheck nil t)
+	(setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+	))
+
+    (use-package pyvenv
+      :straight t
+      :defer t
+      :config
+      (advice-add 'python-mode :before #'pyvenv-mode))
+
+    (use-package py-autopep8
+      :config
+      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+
+    (use-package ein
+      :config
+      (setq python-shell-interpreter "ipython"
+	    python-shell-interpreter-arg "-i --simple-prompt"))
+  #+END_SRC
+
+**** HTML/CSS support
+
+  #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/webdev-conf.el
+    ;;; webdev-conf.el -*- lexical-binding: t; -*-
+
+      (use-package web-mode
+	:straight t
+	:init
+	(setq web-mode-enable-current-element-highlight t
+	      web-mode-enable-current-column-highlight t)
+	:mode
+	(("\\.phtml\\'" . web-mode)
+	 ("\\.cshtml\\'" . web-mode)
+	 ("\\.tpl\\.php\\'" . web-mode)
+	 ("\\.[agj]sp\\'" . web-mode)
+	 ("\\.as[cp]x\\'" . web-mode)
+	 ("\\.erb\\'" . web-mode)
+	 ("\\.mustache\\'" . web-mode)
+	 ("\\.djhtml\\'" . web-mode)
+	 ("\\.html?\\'" . web-mode)
+	 ("\\.css\\'" . web-mode))
+
+	:config
+	(setq  web-mode-markup-indent-offset 2
+	       web-mode-css-indent-offset 2
+	       web-mode-code-indent-offset 2
+	       web-mode-style-padding 1
+	       web-mode-script-padding 1
+	       web-mode-block-padding 0
+	       web-mode-enable-auto-pairing t
+	       web-mode-enable-css-colorization t
+	       web-mode-enable-part-face t
+	       web-mode-comment-keywords t
+	       web-mode-enable-heredoc-fontification t)
+	(set-face-attribute 'web-mode-css-at-rule-face nil :foreground "Pink3")
+	(add-to-list 'company-backends '(company-css company-web-html))
+	)
+
+      ;; Configure Emmet-mode and attach it to Web-mode.
+
+      (use-package emmet-mode
+	:straight t
+	:config
+	(setq emmet-self-closing-tag-style "")
+	:hook (web-mode))
+
+
+      ;; Configure Skewer-mode
+
+      (use-package skewer-mode
+	:straight t
+	:init
+	(add-hook 'web-mode-hook 'my-skewer-enable)
+	:hook
+	(web-mode))
+
+      (use-package impatient-mode
+	:straight t
+	:hook
+	(web-mode))
+
+      (use-package lorem-ipsum)
+  #+END_SRC
+
+**** Javascript Support
+
+     #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/js-conf.el
+       ;; js-conf.el -*- lexical-binding: t; -*-
+
+       ;; Install js2-mode for better javascript editing
+
+       (use-package js2-mode
+	 :straight t
+	 :defer t
+	 :interpreter "node"
+	 :mode
+	 (("\\.js\\'" . js2-mode))
+	 )
+
+       (use-package xref-js2
+	 :straight t
+	 :after js2-mode
+	 :defer t
+	 :config
+	 (add-hook 'js2-mode-hook (lambda ()
+				    (add-hook 'xref-backend-functions #'xref-js2-xref-backend))))
+
+       (use-package js2-refactor
+	 :straight t
+	 :defer t
+	 :after js2-mode
+	 :config
+	 (add-hook 'js2-mode-hook js2-refactor-mode))
+
+       (use-package tide
+	 :straight t
+	 :after (company flycheck company-tide)
+	 :hook
+	 ((js2-mode . tide-setup)
+	  (js2-mode . tide-hl-identifier-mode)
+	  (before-save . tide-format-before-save))
+	 :config
+	 (add-to-list 'company-backends 'company-tide)
+	 )
+
+ #+END_SRC
+
+**** PHP Support 
+
+  #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/php-conf.el
+    ;; php-conf.el -*- lexical-binding: t; -*-
+
+    ;; Install php-mode
+
+    (use-package php-mode
+      :straight t
+      :defer t
+      :mode
+      (("\\.php\\'" . php-mode))
+      :config
+      (add-hook 'php-mode-hook (lambda ()
+				(add-to-list 'company-backends 'company-ac-php-backend))))
+
+    ;; Auto-completion support
+
+    (use-package company-php
+      :straight t
+      :defer t
+      )
+  #+END_SRC
     
-*** Csharp Support
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/csharp-conf.el
-  ;; csharp-conf.el -*- lexical-binding: t; -*-
+**** Csharp Support
+ #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/csharp-conf.el
+   ;; csharp-conf.el -*- lexical-binding: t; -*-
 
-  (use-package csharp-mode
+   (use-package csharp-mode
+     :straight t
+     :defer t
+     :config
+     (add-hook 'csharp-mode-hook 'flycheck-mode))
+
+   (use-package csproj-mode
+     :straight t
+     :defer t)
+
+   (use-package omnisharp
+     :straight t
+     :defer t
+     :hook ((csharp-mode . omnisharp-mode))
+     :config
+     (add-to-list 'company-backends 'company-omnisharp))
+
+
+
+ #+END_SRC
+ 
+** Tools
+   
+*** Version control
+
+  #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/vc-conf.el
+    ;; vc-conf.el -*- lexical-binding: t; -*-
+
+    (use-package magit
+      :straight t)
+
+    (use-package magit-gh-pulls
+      :straight t
+      :defer t
+      :config
+      (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
+
+    (use-package magit-gitflow
+      :straight t)
+
+    (use-package magit-imerge
+      :straight t)
+
+    (use-package magithub
+      :straight t)
+
+    (use-package diff-hl
+      :straight t
+      :defer t
+      :config
+      (global-diff-hl-mode))
+
+  #+END_SRC
+
+*** Org mode extended support
+
+ #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/org-conf.el
+   ;;; org-conf.el -*- lexical-binding: t; -*-
+   
+   (use-package org
+     :straight t
+     :defer t
+     :config
+     (setq org-directory "~/Documents/Organize/"
+	   org-agenda-files (concat org-directory "agenda.org")
+	   org-hide-emphasis-markers t)
+     (font-lock-add-keywords 'org-mode
+			     '(("^ *\\([-]\\) "
+				(0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+     (let* ((variable-tuple
+	     (when (display-graphic-p)
+		 (cond
+		  ((x-list-fonts "Fira Code") '(:font "Fira Code"))
+		  ((x-list-fonts "Iosveka") '(:font "Iosveka"))
+		  ((x-list-fonts "Verdana") '(:font "Verdana"))
+		  ((x-family-fonts "Sans Serif") '(:family "Sans Serif"))
+		  (nil (warn "Can't find a Sans Serif Font. Please install Source Sans Pro.")))))
+	    (base-font-color (face-foreground 'default nil 'default))
+	    (headline `(:inherit default :weight bold :foreground ,base-font-color)))
+       (custom-theme-set-faces
+	'user
+	`(org-level-8 ((t (,@headline ,@variable-tuple))))
+	`(org-level-7 ((t (,@headline ,@variable-tuple))))
+	`(org-level-6 ((t (,@headline ,@variable-tuple))))
+	`(org-level-5 ((t (,@headline ,@variable-tuple))))
+	`(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+	`(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+	`(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+	`(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+	`(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))
+	))
+     (with-eval-after-load "ox-latex"
+       (add-to-list 'org-latex-classes
+		    '("koma-book" "\\documentclass{scrbook}"
+		      ("\\part{%s}" . "\\part*{%s}")
+		      ("\\chapter{%s}" . "\\chapter*{%s}")
+		      ("\\section{%s}" . "\\section*{%s}")
+		      ("\\subsection{%s}" . "\\subsection*{%s}")
+		      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		      ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+     )
+   (use-package org-contrib
+     :straight t
+     :after org)
+   
+   (use-package org-bullets
+     :straight t
+     :config
+     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+ #+END_SRC
+
+*** PDF support
+
+ #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/pdf-conf.el
+   ;; pdf-conf.el -*- lexical-binding: t; -*-
+
+   (use-package pdf-tools
+     :straight t
+     :defer t
+     :magic ("%PDF" . pdf-occur-global-minor-mode)
+     :config
+     (pdf-tools-install))
+ #+END_SRC
+*** Tree-sitter support
+
+ #+begin_src emacs-lisp :mkdirp yes :tangle modules/tools/treesitter-conf.el
+   ;; treesitter-conf.el -*- lexical-binding: t; -*-
+
+   (use-package tree-sitter
+     :straight t
+     :hook (prog-mode . tree-sitter-mode)
+     :config
+     (add-hook 'tree-sitter-mode-hook #'tree-sitter-hl-mode)
+     )
+
+   (use-package tree-sitter-langs
+     :straight t
+     :after tree-sitter
+     )
+
+   (use-package tree-sitter-indent
+     :straight t
+     :after tree-sitter
+     )
+
+ #+end_src
+ 
+*** Evil mode support
+
+#+begin_src emacs-lisp :mkdirp yes :tangle modules/tools/evil_mode-conf.el
+  ;; evil_mode-conf.el -*- lexical-binding: t; -*-
+
+  (use-package evil
     :straight t
-    :defer t
     :config
-    (add-hook 'csharp-mode-hook 'flycheck-mode))
-
-  (use-package csproj-mode
-    :straight t
-    :defer t)
-
-  (use-package omnisharp
-    :straight t
-    :defer t
-    :hook ((csharp-mode . omnisharp-mode))
-    :config
-    (add-to-list 'company-backends 'company-omnisharp))
-
-
-
-#+END_SRC
-
-** Org mode extended support
-
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/org-conf.el
-  ;;; org-conf.el -*- lexical-binding: t; -*-
-
-  (use-package org
-    :straight t
-    :defer t
-    :config
-    (setq org-directory "~/Documents/Organize/"
-	  org-agenda-files (concat org-directory "agenda.org")
-	  org-hide-emphasis-markers t)
-    (font-lock-add-keywords 'org-mode
-			    '(("^ *\\([-]\\) "
-			       (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-    (let* ((variable-tuple
-	    (when (display-graphic-p)
-		(cond
-		 ((x-list-fonts "Fira Code") '(:font "Fira Code"))
-		 ((x-list-fonts "Iosveka") '(:font "Iosveka"))
-		 ((x-list-fonts "Verdana") '(:font "Verdana"))
-		 ((x-family-fonts "Sans Serif") '(:family "Sans Serif"))
-		 (nil (warn "Can't find a Sans Serif Font. Please install Source Sans Pro.")))))
-	   (base-font-color (face-foreground 'default nil 'default))
-	   (headline `(:inherit default :weight bold :foreground ,base-font-color)))
-      (custom-theme-set-faces
-       'user
-       `(org-level-8 ((t (,@headline ,@variable-tuple))))
-       `(org-level-7 ((t (,@headline ,@variable-tuple))))
-       `(org-level-6 ((t (,@headline ,@variable-tuple))))
-       `(org-level-5 ((t (,@headline ,@variable-tuple))))
-       `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-       `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
-       `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
-       `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
-       `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))
-       ))
+    (evil-mode 1)
     )
 
+#+end_src
 
-  (use-package org-plus-contrib
-    :straight t
-    :defer t
-    :after org
-    )
-
-  (use-package org-bullets
-    :straight t
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-#+END_SRC
-
-** PDF support
-
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/pdf-conf.el
-  ;; pdf-conf.el -*- lexical-binding: t; -*-
-
-  (use-package pdf-tools
-    :straight t
-    :defer t
-    :magic ("%PDF" . pdf-occur-global-minor-mode)
-    :config
-    (pdf-tools-install))
-#+END_SRC
 ** IRC settings
 
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/net/irc-conf.el

@@ -32,14 +32,20 @@
      `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
      `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))
      ))
+  (with-eval-after-load "ox-latex"
+    (add-to-list 'org-latex-classes
+		 '("koma-book" "\\documentclass{scrbook}"
+		   ("\\part{%s}" . "\\part*{%s}")
+		   ("\\chapter{%s}" . "\\chapter*{%s}")
+		   ("\\section{%s}" . "\\section*{%s}")
+		   ("\\subsection{%s}" . "\\subsection*{%s}")
+		   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		   ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
   )
-
-
-(use-package org-plus-contrib
+(use-package org-contrib
   :straight t
-  :defer t
-  :after org
-  )
+  :after org)
 
 (use-package org-bullets
   :straight t

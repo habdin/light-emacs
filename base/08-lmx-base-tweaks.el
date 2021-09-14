@@ -79,8 +79,7 @@
 	dashboard-set-file-icons 1
 	dashboard-items '((recents . 5)
 			  (projects . 5)
-			  (bookmarks . 5)
-			  (agenda .5))
+			  (bookmarks . 5))
 	dashboard-set-navigator 1
 	dashboard-center-content 1
 	dashboard-navigator-buttons `(;; line1

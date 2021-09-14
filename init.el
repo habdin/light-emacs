@@ -17,7 +17,6 @@
 
 ;; LMX Mouules config files section
 
-(load (concat user-emacs-directory "modules/tools/vc-conf") nil 'nomessage)
 (load (concat user-emacs-directory "modules/file-manager/treemacs.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/completion/complmngr-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/prog/snippets-conf.el") nil 'nomessage)
@@ -28,7 +27,9 @@
 (load (concat user-emacs-directory "modules/lang/php-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/lang/js-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/lang/csharp-conf.el") nil 'nomessage)
+(load (concat user-emacs-directory "modules/tools/vc-conf") nil 'nomessage)
 (load (concat user-emacs-directory "modules/tools/org-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/tools/pdf-conf.el") nil 'nomessage)
+(load (concat user-emacs-directory "modules/tools/evil_mode-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/tools/treesitter-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/net/irc-conf.el") nil 'nomessage)

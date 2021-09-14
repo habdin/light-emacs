@@ -3,7 +3,7 @@
 (use-package doom-modeline
 	     :straight t
 	     :init (doom-modeline-mode 1)
-	     (setq doom-modeline-height 16)
+	     (setq doom-modeline-height 25)
 	     (column-number-mode t)
 	     :config
 	     (if (daemonp)
