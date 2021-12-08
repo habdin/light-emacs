@@ -16,6 +16,12 @@
   :config
   (erc-colorize-mode 1))
 
+(use-package erc-sasl
+  :defer t
+  :straight (erc-sasl :type git :host github :repo "suhailshergill/erc-sasl")
+  :config
+  (add-to-list 'erc-sasl-server-regexp-list ".*"))
+
 (use-package rcirc
   :defer t
   :config
