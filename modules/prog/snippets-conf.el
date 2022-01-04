@@ -6,7 +6,7 @@
   :config
   (add-hook 'after-init-hook #'yas-reload-all)
   :init
-  (yas-global-mode t)
+  (add-hook 'prog-mode #'yas-minor-mode)
   )
 
 (use-package yasnippet-snippets
