@@ -4,7 +4,8 @@
   :straight t
   :defer t
   :config
-  (add-hook 'after-init-hook #'yas-reload-all)
+  (add-hook 'prog-mode #'yas-reload-all)
+  ;;(add-hook 'after-init-hook #'yas-reload-all)
   :init
   (add-hook 'prog-mode #'yas-minor-mode)
   )

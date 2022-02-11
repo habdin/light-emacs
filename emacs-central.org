@@ -9,9 +9,9 @@
 
 #+BEGIN_SRC emacs-lisp :tangle init.el
   ;;; init.el -*- lexical-binding: t; -*-
-
+  
   ;; LMX Base config files section
-
+  
   (load (concat user-emacs-directory "base/01-bootstrap.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/02-pkgmngr.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/03-personal-info.el") nil 'nomessage)
@@ -23,10 +23,10 @@
   (load (concat user-emacs-directory "base/09-bufmngr-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/10-prjmngr-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "base/11-ligatures-conf.el") nil 'nomessage)
-
-
+  
+  
   ;; LMX Mouules config files section
-
+  
   (load (concat user-emacs-directory "modules/file-manager/treemacs.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/completion/complmngr-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/prog/snippets-conf.el") nil 'nomessage)
@@ -43,8 +43,7 @@
   (load (concat user-emacs-directory "modules/tools/evil_mode-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/tools/treesitter-conf.el") nil 'nomessage)
   (load (concat user-emacs-directory "modules/net/irc-conf.el") nil 'nomessage)
-
-
+  (load (concat user-emacs-directory "modules/lang/lsp-conf.el") nil 'nomessage)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle base/01-bootstrap.el
@@ -276,33 +275,33 @@
 
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/07-ui-conf.el
   ;;; 07-ui-conf.el -*- lexical-binding: t; -*-
-
+  
   ;;; Appearance tweaks
-
+  
   ;; Frame title format
   (setq frame-title-format
 	'("" invocation-name " - "
 	  (:eval (if (buffer-file-name)
 		     (abbreviate-file-name (buffer-file-name))
 		   "%b"))))
-
+  
   ;; Font setting
   (add-hook 'after-make-frame-functions (lambda (frame) (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")))
   (add-to-list 'default-frame-alist
 	       '(font . "Fira Code-11"))
   ;; (add-hook 'after-init-hook 'my-set-fira-code-ligatures)
-
+  
   ;; Theme settings
-  (lmx-load-theme 'doom-acario-dark)
-
+  (lmx-load-theme 'doom-material)
+  
   ;; Hightlight current line
   (global-hl-line-mode)
-
+  
   ;; Always indicate empty lines within files and buffers
   (setq default-indicate-empty-lines t)
   (when (fboundp 'fringe-mode)
     (set-fringe-mode 4))
-
+  
 #+END_SRC
 
 *** Enhanced base functionality
@@ -721,22 +720,23 @@
 
  #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/prog/snippets-conf.el
    ;;; snippets-conf.el -*- lexical-binding: t; -*-
-
+   
    (use-package yasnippet
      :straight t
      :defer t
      :config
-     (add-hook 'after-init-hook #'yas-reload-all)
+     (add-hook 'prog-mode #'yas-reload-all)
+     ;;(add-hook 'after-init-hook #'yas-reload-all)
      :init
-     (yas-global-mode t)
+     (add-hook 'prog-mode #'yas-minor-mode)
      )
-
+   
    (use-package yasnippet-snippets
      :straight t
      :after yasnippet)
-
-
-
+   
+   
+   
  #+END_SRC
 
 *** Programming language Support
@@ -775,16 +775,14 @@
 
   #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/webdev-conf.el
     ;;; webdev-conf.el -*- lexical-binding: t; -*-
-
+    
       (use-package web-mode
 	:straight t
-	:init
-	(setq web-mode-enable-current-element-highlight t
-	      web-mode-enable-current-column-highlight t)
 	:mode
 	(("\\.phtml\\'" . web-mode)
 	 ("\\.cshtml\\'" . web-mode)
 	 ("\\.tpl\\.php\\'" . web-mode)
+	 ("\\.blade\\.php\\'" . web-mode)
 	 ("\\.[agj]sp\\'" . web-mode)
 	 ("\\.as[cp]x\\'" . web-mode)
 	 ("\\.erb\\'" . web-mode)
@@ -792,46 +790,34 @@
 	 ("\\.djhtml\\'" . web-mode)
 	 ("\\.html?\\'" . web-mode)
 	 ("\\.css\\'" . web-mode))
-
 	:config
-	(setq  web-mode-markup-indent-offset 2
-	       web-mode-css-indent-offset 2
-	       web-mode-code-indent-offset 2
-	       web-mode-style-padding 1
-	       web-mode-script-padding 1
-	       web-mode-block-padding 0
-	       web-mode-enable-auto-pairing t
-	       web-mode-enable-css-colorization t
-	       web-mode-enable-part-face t
-	       web-mode-comment-keywords t
-	       web-mode-enable-heredoc-fontification t)
 	(set-face-attribute 'web-mode-css-at-rule-face nil :foreground "Pink3")
 	(add-to-list 'company-backends '(company-css company-web-html))
 	)
-
+    
       ;; Configure Emmet-mode and attach it to Web-mode.
-
+    
       (use-package emmet-mode
 	:straight t
-	:config
-	(setq emmet-self-closing-tag-style "")
-	:hook (web-mode))
-
-
+	:config (setq emmet-self-closing-tag-style "")
+	:hook (web-mode)
+	)
+    
+    
       ;; Configure Skewer-mode
-
+    
       (use-package skewer-mode
 	:straight t
 	:init
 	(add-hook 'web-mode-hook 'my-skewer-enable)
 	:hook
 	(web-mode))
-
+    
       (use-package impatient-mode
 	:straight t
 	:hook
 	(web-mode))
-
+    
       (use-package lorem-ipsum)
   #+END_SRC
 
@@ -927,6 +913,42 @@
 
  #+END_SRC
  
+*** Language Server Support
+
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/lsp-conf.el
+  ;; lsp-conf.el -*- lexical-binding: t; -*-
+  
+  (use-package lsp-mode
+    :straight t
+    :init
+    (setq lsp-keymap-prefix "C-c l")
+    :hook
+    (prog-mode . lsp)
+    (lsp-mode . lsp-enable-which-key-integration)
+    :commands lsp)
+  
+  (use-package lsp-ui
+    :straight t
+    :after lsp-mode
+    :commands lsp-ui-mode)
+  
+  (use-package lsp-ivy
+    :straight t
+    :after lsp-mode
+    :commands lsp-ivy-workspace-symbol)
+  
+  (use-package lsp-treemacs
+    :straight t
+    :after lsp-mode
+    :commands lsp-treemacs-errors-list)
+  
+  (use-package lsp-pyright
+    :straight t
+    :hook (python-mode . (lambda () (require 'lsp-pyright)
+			   (lsp))))
+#+END_SRC
+
+
 ** Tools
    
 *** Version control

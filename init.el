@@ -33,3 +33,4 @@
 (load (concat user-emacs-directory "modules/tools/evil_mode-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/tools/treesitter-conf.el") nil 'nomessage)
 (load (concat user-emacs-directory "modules/net/irc-conf.el") nil 'nomessage)
+(load (concat user-emacs-directory "modules/lang/lsp-conf.el") nil 'nomessage)

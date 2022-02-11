@@ -16,7 +16,7 @@
 ;; (add-hook 'after-init-hook 'my-set-fira-code-ligatures)
 
 ;; Theme settings
-(lmx-load-theme 'doom-acario-dark)
+(lmx-load-theme 'doom-material)
 
 ;; Hightlight current line
 (global-hl-line-mode)
