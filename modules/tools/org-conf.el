@@ -34,14 +34,25 @@
      ))
   (with-eval-after-load "ox-latex"
     (add-to-list 'org-latex-classes
-		 '("koma-book" "\\documentclass{scrbook}"
-		   ("\\part{%s}" . "\\part*{%s}")
+		 '("koma-book-no-part" "\\documentclass[11pt]{scrbook}"
+;		   ("\\part{%s}" . "\\part*{%s}") 
 		   ("\\chapter{%s}" . "\\chapter*{%s}")
 		   ("\\section{%s}" . "\\section*{%s}")
 		   ("\\subsection{%s}" . "\\subsection*{%s}")
 		   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 		   ("\\paragraph{%s}" . "\\paragraph*{%s}")
-		   ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+		   ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+		 )
+    (add-to-list 'org-latex-classes
+		 '("koma-book" "\\documentclass[11pt]{scrbook}"
+		   ("\\part{%s}" . "\\part*{%s}") 
+		   ("\\chapter{%s}" . "\\chapter*{%s}")
+		   ("\\section{%s}" . "\\section*{%s}")
+		   ("\\subsection{%s}" . "\\subsection*{%s}")
+		   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		   ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+		 ))
   )
 (use-package org-contrib
   :straight t

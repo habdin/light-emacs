@@ -23,8 +23,11 @@
 
   (use-package emmet-mode
     :straight t
-    :config (setq emmet-self-closing-tag-style "")
-    :hook (web-mode)
+    :config
+    (setq emmet-self-closing-tag-style "")
+    (emmet-mode 1)
+    :hook
+    (web-mode)
     )
 
 

@@ -22,6 +22,7 @@
 (use-package lsp-treemacs
   :straight t
   :after lsp-mode
+  :config (lsp-treemacs-sync-mode 1)
   :commands lsp-treemacs-errors-list)
 
 (use-package lsp-pyright

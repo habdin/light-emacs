@@ -775,7 +775,7 @@
 
   #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/webdev-conf.el
     ;;; webdev-conf.el -*- lexical-binding: t; -*-
-    
+
       (use-package web-mode
 	:straight t
 	:mode
@@ -794,30 +794,33 @@
 	(set-face-attribute 'web-mode-css-at-rule-face nil :foreground "Pink3")
 	(add-to-list 'company-backends '(company-css company-web-html))
 	)
-    
+
       ;; Configure Emmet-mode and attach it to Web-mode.
-    
+
       (use-package emmet-mode
 	:straight t
-	:config (setq emmet-self-closing-tag-style "")
-	:hook (web-mode)
+	:config
+	(setq emmet-self-closing-tag-style "")
+	(emmet-mode 1)
+	:hook
+	(web-mode)
 	)
-    
-    
+
+
       ;; Configure Skewer-mode
-    
+
       (use-package skewer-mode
 	:straight t
 	:init
 	(add-hook 'web-mode-hook 'my-skewer-enable)
 	:hook
 	(web-mode))
-    
+
       (use-package impatient-mode
 	:straight t
 	:hook
 	(web-mode))
-    
+
       (use-package lorem-ipsum)
   #+END_SRC
 
@@ -917,7 +920,7 @@
 
 #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/lang/lsp-conf.el
   ;; lsp-conf.el -*- lexical-binding: t; -*-
-  
+
   (use-package lsp-mode
     :straight t
     :init
@@ -926,22 +929,23 @@
     (prog-mode . lsp)
     (lsp-mode . lsp-enable-which-key-integration)
     :commands lsp)
-  
+
   (use-package lsp-ui
     :straight t
     :after lsp-mode
     :commands lsp-ui-mode)
-  
+
   (use-package lsp-ivy
     :straight t
     :after lsp-mode
     :commands lsp-ivy-workspace-symbol)
-  
+
   (use-package lsp-treemacs
     :straight t
     :after lsp-mode
+    :config (lsp-treemacs-sync-mode 1)
     :commands lsp-treemacs-errors-list)
-  
+
   (use-package lsp-pyright
     :straight t
     :hook (python-mode . (lambda () (require 'lsp-pyright)
@@ -986,7 +990,7 @@
 
  #+BEGIN_SRC emacs-lisp :mkdirp yes :tangle modules/tools/org-conf.el
    ;;; org-conf.el -*- lexical-binding: t; -*-
-   
+
    (use-package org
      :straight t
      :defer t
@@ -1021,19 +1025,30 @@
 	))
      (with-eval-after-load "ox-latex"
        (add-to-list 'org-latex-classes
-		    '("koma-book" "\\documentclass{scrbook}"
-		      ("\\part{%s}" . "\\part*{%s}")
+		    '("koma-book-no-part" "\\documentclass[11pt]{scrbook}"
+   ;		   ("\\part{%s}" . "\\part*{%s}") 
 		      ("\\chapter{%s}" . "\\chapter*{%s}")
 		      ("\\section{%s}" . "\\section*{%s}")
 		      ("\\subsection{%s}" . "\\subsection*{%s}")
 		      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 		      ("\\paragraph{%s}" . "\\paragraph*{%s}")
-		      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+		      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+		    )
+       (add-to-list 'org-latex-classes
+		    '("koma-book" "\\documentclass[11pt]{scrbook}"
+		      ("\\part{%s}" . "\\part*{%s}") 
+		      ("\\chapter{%s}" . "\\chapter*{%s}")
+		      ("\\section{%s}" . "\\section*{%s}")
+		      ("\\subsection{%s}" . "\\subsection*{%s}")
+		      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		      ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+		    ))
      )
    (use-package org-contrib
      :straight t
      :after org)
-   
+
    (use-package org-bullets
      :straight t
      :config
