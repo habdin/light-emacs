@@ -12,17 +12,17 @@
   
   ;; LMX Base config files section
   
-  (load (concat user-emacs-directory "base/01-bootstrap.el") nil 'nomessage)
-  (load (concat user-emacs-directory "base/02-pkgmngr.el") nil 'nomessage)
-  (load (concat user-emacs-directory "base/03-personal-info.el") nil 'nomessage)
-  (load (concat user-emacs-directory "base/04-lmx-lisp.el") nil 'nomessage)
-  (load (concat user-emacs-directory "base/05-modeline-conf.el") nil 'nomessage)
-  (load (concat user-emacs-directory "base/06-themes-conf.el") nil 'nomessage)
-  (load (concat user-emacs-directory "base/07-ui-conf.el") nil 'nomessage)
-  (load (concat user-emacs-directory "base/08-lmx-base-tweaks.el") nil 'nomessage)
-  (load (concat user-emacs-directory "base/09-bufmngr-conf.el") nil 'nomessage)
-  (load (concat user-emacs-directory "base/10-prjmngr-conf.el") nil 'nomessage)
-  (load (concat user-emacs-directory "base/11-ligatures-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "core/01-bootstrap.el") nil 'nomessage)
+  (load (concat user-emacs-directory "core/02-pkgmngr.el") nil 'nomessage)
+  (load (concat user-emacs-directory "core/03-personal-info.el") nil 'nomessage)
+  (load (concat user-emacs-directory "core/04-lmx-lisp.el") nil 'nomessage)
+  (load (concat user-emacs-directory "core/05-modeline-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "core/06-themes-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "core/07-ui-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "core/08-lmx-base-tweaks.el") nil 'nomessage)
+  (load (concat user-emacs-directory "core/09-bufmngr-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "core/10-prjmngr-conf.el") nil 'nomessage)
+  (load (concat user-emacs-directory "core/11-ligatures-conf.el") nil 'nomessage)
   
   
   ;; LMX Mouules config files section
@@ -46,7 +46,7 @@
   (load (concat user-emacs-directory "modules/lang/lsp-conf.el") nil 'nomessage)
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :tangle base/01-bootstrap.el
+#+BEGIN_SRC emacs-lisp :tangle core/01-bootstrap.el
   ;;; 01-bootstrap.el -*- lexical-binding: t; -*-
 
   ;; Disable garbagge collection at Emacs bootstrap
@@ -74,7 +74,7 @@
 
 ** LMX Package Management
 
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/02-pkgmngr.el
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle core/02-pkgmngr.el
   ;;; 02-pkgmngr.el -*- lexical-binding: t; -*-
 
   ;; Initialize Straight
@@ -146,7 +146,7 @@
 
 ** Personal Information
 
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/03-personal-info.el
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle core/03-personal-info.el
 ;;; 03-personal-info.el -*- lexical-binding: t; -*-
 
 (setq user-full-name "Hassan Abdin"
@@ -156,7 +156,7 @@
 
 ** LMX lisp functions
 
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/04-lmx-lisp.el
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle core/04-lmx-lisp.el
   ;;; 04-lmx-lisp.el -*- lexical-binding: t; -*-
 
   (use-package dash-functional
@@ -234,7 +234,7 @@
 ** LMX User Interface settings
 *** Modeline settings
 
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/05-modeline-conf.el
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle core/05-modeline-conf.el
   ;;; 05-modeline-conf.el -*- lexical-binding: t; -*-
 
   (use-package doom-modeline
@@ -251,7 +251,7 @@
 
 *** Themes
 
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/06-themes-conf.el
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle core/06-themes-conf.el
   ;;;  06-themes-conf.el -*- lexical-binding: t; -*-
 
   (use-package doom-themes
@@ -273,7 +273,7 @@
 
 *** Global buffer appearance settings
 
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/07-ui-conf.el
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle core/07-ui-conf.el
   ;;; 07-ui-conf.el -*- lexical-binding: t; -*-
   
   ;;; Appearance tweaks
@@ -306,7 +306,7 @@
 
 *** Enhanced base functionality
 
-#+BEGIN_SRC emacs-lisp :mkdirp :tangle base/08-lmx-base-tweaks.el
+#+BEGIN_SRC emacs-lisp :mkdirp :tangle core/08-lmx-base-tweaks.el
   ;;; 08-lmx-base-tweaks.el -*- lexical-binding: t; -*-
 
   ;; Define default Emacs environment settings
@@ -428,7 +428,7 @@
 
 *** Buffer Manager settings
 
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/09-bufmngr-conf.el
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle core/09-bufmngr-conf.el
   ;;; 09-bufmngr-conf.el -*- lexical-binding: t; -*-
 
   (use-package ace-window
@@ -443,7 +443,7 @@
 #+END_SRC
 
 *** Ligature Support
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/11-ligatures-conf.el
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle core/11-ligatures-conf.el
   ;; 11-ligatures-conf.el ;; -*- lexical-binding: t; -*- ;;
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -490,7 +490,7 @@
 
 ** Project Manager settings
 
-#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle base/10-prjmngr-conf.el 
+#+BEGIN_SRC emacs-lisp :mkdirp yes :tangle core/10-prjmngr-conf.el 
   ;;; 10-prjmngr-conf.el -*- lexical-binding: t; -*-
 
   (use-package projectile
